@@ -572,6 +572,13 @@
 
     (f.body || []).forEach(function (p) { box.appendChild(el('p', null, p)); });
 
+    // Short bullet points, deck-style. Preferred over long prose in `body`.
+    if (f.bullets && f.bullets.length) {
+      var ul = document.createElement('ul');
+      f.bullets.forEach(function (b) { ul.appendChild(el('li', null, b)); });
+      box.appendChild(ul);
+    }
+
     if (f.media && f.media.length) {
       var grid = el('div', 'media-grid' + (f.media.length > 1 ? ' cols-2' : ''));
       f.media.forEach(function (m) { grid.appendChild(buildMedia(m)); });
