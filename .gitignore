@@ -1,0 +1,10 @@
+# Private working notes — not for the public site
+resume-bullets.md
+
+# OS / editor cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/
