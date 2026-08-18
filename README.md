@@ -11,15 +11,15 @@ Everything lives in **`js/content.js`**. That is the only file you edit.
 
 ### Add a GIF or video to an existing feature
 
-1. Drop the file into `assets/<project-id>/` — e.g. `assets/kingdom-of-the-cosmos/horde-steering.gif`
+1. Drop the file into `assets/<project-id>/` — e.g. `assets/starfallen-prince/horde-steering.gif`
 2. Find that feature in `js/content.js` and add one object to its `media` array:
 
 ```js
 media: [
   { type: 'gif',
-    src: 'assets/kingdom-of-the-cosmos/horde-steering.gif',
+    src: 'assets/starfallen-prince/horde-steering.gif',
     weight: '3.2 MB',
-    caption: 'Flow-field steering with 200+ agents.' }
+    caption: 'Weapon aspect: ricochet chaining between enemies.' }
 ]
 ```
 
@@ -43,7 +43,7 @@ Add an object to that project's `features` array:
 ```js
 {
   title: 'Name of the system',
-  tags: ['A*', 'Burst'],              // small mono chips under the title
+  tags: ['A*', 'Pooling'],            // small mono chips under the title
   body: [
     'One paragraph per string. <strong>Bold</strong>, <em>italic</em>, ' +
     '<code>Type.Method()</code> and <a href="...">links</a> all work.'
@@ -54,12 +54,20 @@ Add an object to that project's `features` array:
 
 ### Add a whole new project
 
-Copy any object in `PROJECTS`, change the `id`, and create `assets/<new-id>/`.
-Nothing else needs touching — both `index.html` and `project.html` render
-straight from the array, and the project automatically appears in the grid on
-the home page and in the "Other projects" strip on every other project page.
+There is a **fully-commented template at the very bottom of `js/content.js`**
+(`NEW_PROJECT_TEMPLATE`) documenting every available field. Copy it, uncomment it,
+and paste it into the `PROJECTS` array. Four steps:
 
-Useful fields: `featured: true` adds the accent bar on the card.
+1. Make the folder `assets/<new-id>/` and drop your media in.
+2. Copy the template into `PROJECTS`. **Where you put it in the array is where it
+   appears on the site** — position is how you rank your work.
+3. Set `id` to exactly match the folder name. It becomes the URL:
+   `project.html?id=<new-id>`
+4. Reload. The card appears on the home page automatically, and in the
+   "Other projects" strip on every other project page.
+
+Only `id`, `title` and `tagline` are required — leave anything else out and it
+simply does not render. `featured: true` adds the accent bar on the card, and
 `statusTone` accepts `'accent'` (green — shipped), `'amber'` (in development),
 or `'violet'` (prototype / coming soon).
 

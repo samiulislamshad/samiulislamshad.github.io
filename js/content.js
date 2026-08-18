@@ -18,9 +18,8 @@
      'youtube' - click-to-load facade; `src` is the bare video id.
      'image'   - a plain lazy-loaded still.
 
-   To add a whole project: copy any object in PROJECTS, change the `id`, and
-   make a matching folder under assets/. Nothing else needs touching --
-   index.html and project.html both render straight from this array.
+   To add a whole project: see the fully-commented NEW_PROJECT_TEMPLATE at the
+   very bottom of this file. Copy it, change the `id`, done.
    ============================================================================ */
 
 const SITE = {
@@ -35,15 +34,15 @@ const SITE = {
   blurb:
     'Gameplay and systems programmer with four years building shipped Unity and ' +
     'Godot titles. I work on the parts of a game that have to hold up under load ' +
-    'and under a team: enemy AI, pathfinding, procedural generation, combat ' +
-    'systems, and the editor tooling other disciplines depend on. Most of what ' +
-    'I do is performance-shaped — frame budgets, allocation-free hot paths, ' +
-    'and knowing when to delete a system I already built.',
+    'and under a team: enemy AI, procedural generation, combat systems, and the ' +
+    'editor tooling other disciplines depend on. Most of what I do is ' +
+    'performance-shaped — allocation-free hot paths, work budgets, and knowing ' +
+    'when to delete a system I already built.',
 
-  /* The two numbers that lead the site. Both are straight out of git history. */
+  /* Headline facts. All four are drawn from git history and are checkable. */
   facts: [
-    { num: '41%',   label: 'of 2,427 commits on Kingdoms of the Cosmos — top contributor of 11' },
-    { num: '98%',   label: 'of commits on Project Jadughor — sole developer and architect' },
+    { num: '41%',    label: 'of 2,427 commits on Starfallen Prince — top contributor of nine developers' },
+    { num: '100%',   label: 'of the enemy system on Museum Keeper’s Unity rebuild — every state machine and the pathfinding' },
     { num: '~8,000', label: 'Steam sales on AlexanderBall, built by a team of 3' },
     { num: '4 yrs',  label: 'professional gameplay programming across Unity and Godot' }
   ]
@@ -54,11 +53,11 @@ const SITE = {
 const PROJECTS = [
 
   /* ======================================================================
-     1. KINGDOMS OF THE COSMOS
+     1. STARFALLEN PRINCE
      ====================================================================== */
   {
-    id: 'kingdom-of-the-cosmos',
-    title: 'Kingdoms of the Cosmos',
+    id: 'starfallen-prince',
+    title: 'Starfallen Prince',
     studio: 'Bad WiFi Interactive',
     period: 'Sept 2024 — present',
     status: 'In development',
@@ -69,102 +68,66 @@ const PROJECTS = [
 
     tagline:
       'Pixel-art 2D isometric bullet-heaven with a story-driven kingdom-building ' +
-      'hub. I am the top contributor of eleven on a 78,000-line codebase.',
+      'hub. I am the top contributor of nine on a 78,000-line codebase.',
 
     about: [
       'A hybrid of two genres: expedition runs are a bullet-heaven where hundreds of ' +
       'enemies converge on the player, and between runs you return to the Nexus hub to ' +
       'build up your kingdom, upgrade permanently, and travel between planets.',
 
-      'The two halves pull in opposite technical directions. The bullet-heaven half is a ' +
-      'throughput problem — steering and pathfinding hundreds of agents inside a frame ' +
-      'budget. The hub half is a structure problem — interactable buildings, quests, ' +
-      'dialogue, cutscenes and persistence that all have to compose cleanly across an ' +
-      'eleven-person team. Most of my work sits on both sides of that line.'
+      'On a nine-developer team the work is divided by system. Mine is the combat and ' +
+      'presentation layer — the weapon stack, the player, animation, cutscenes, the hub, ' +
+      'audio and the data layer. The sections below are limited to systems where I own ' +
+      'the majority of the code that is actually in the build.'
     ],
 
     metrics: [
       { label: '1,205 C# files' },
       { label: '77,978 lines' },
       { label: '997 / 2,427 commits (41%)' },
-      { label: 'URP 17.5 2D' },
-      { label: 'Zenject + UniRx + UniTask' }
+      { label: 'Top contributor of 9' },
+      { label: 'URP 17.5 2D' }
     ],
 
-    cardMetrics: ['77,978 lines / 1,205 files', 'Top contributor of 11', 'Burst/Jobs A* + flow fields'],
+    cardMetrics: ['77,978 lines / 1,205 files', 'Top contributor of nine', 'Weapon stack: 95% of live code'],
 
-    stack: ['Unity 6.5', 'C#', 'URP 2D', 'Zenject', 'UniRx', 'UniTask', 'Burst + Jobs', 'FMOD', 'Compute shaders', 'Cinemachine', 'DOTween'],
+    stack: ['Unity 6.5', 'C#', 'URP 2D', 'Zenject', 'UniRx', 'UniTask', 'FMOD', 'Cinemachine', 'DOTween', 'Shader Graph', 'VFX Graph'],
 
     roles: [
-      { name: 'Gameplay Programmer', detail: 'Combat, movement, dash, light/heavy attack, weapon throw, damage and status effects.' },
-      { name: 'Systems Programmer',  detail: 'Enemy AI and pathfinding, weapons, cutscenes, quests, persistence, input rebinding.' },
-      { name: 'Performance',         detail: 'Burst/Jobs pathfinding, frame-budgeted schedulers, allocation elimination on hot paths.' },
-      { name: 'Tools',               detail: 'Editor animation previewer, cutscene property drawers, config validator, data migrator.' },
+      { name: 'Gameplay Programmer', detail: 'Combat, movement, dash, light and heavy attack, weapon throw, damage calculation.' },
+      { name: 'Systems Programmer',  detail: 'Weapon stack, weapon aspects, skill cards, cutscene sequencer, Nexus hub, data layer.' },
+      { name: 'Performance',         detail: 'Allocation-free combat hot paths, chunk-system rework, hit-effect lag fix.' },
+      { name: 'Animation',           detail: 'Split-body index-driven player animation, enemy view layer and VFX.' },
+      { name: 'Tools',               detail: 'Cutscene property drawers, config validator, and a parameter migrator.' },
       { name: 'Audio Integration',   detail: 'FMOD adaptive music driven from gameplay signals, layered stems on a VCA.' }
     ],
 
     mediaNote:
       'Gameplay captures for this project are not published yet. Drop GIFs or MP4s into ' +
-      'assets/kingdom-of-the-cosmos/ and add them to the matching feature in js/content.js.',
+      'assets/starfallen-prince/ and add them to the matching feature in js/content.js.',
 
     features: [
       {
-        title: 'Burst/Jobs A* and flow-field horde steering',
-        tags: ['Burst', 'Jobs', 'A*', 'Flow field', 'Spatial hash'],
-        body: [
-          'Pathfinding runs as a <code>[BurstCompile] IJob</code> over <code>NativeArray</code> ' +
-          'and <code>NativeHashMap</code>, with per-terrain cost multipliers so agents route ' +
-          'around lava rather than through it.',
-
-          'The service that owns it fixes a genuine concurrency bug: the grid was being ' +
-          'mutated while jobs were still reading it. Dynamic enemy blocking now writes to a ' +
-          'separate array from the terrain markers, so a moving enemy can never clobber ' +
-          'static hazard data mid-job.',
-
-          'Alongside it I built a second movement system entirely — flow-field seek plus ' +
-          'spatial-hash separation plus collision-slide, using flat-array linked buckets so ' +
-          'it allocates nothing per frame after warm-up. It was deliberately built to be ' +
-          '<strong>A/B switchable against the old path system in the same scene</strong> from ' +
-          'an enemy config, so the comparison could be made on real content instead of ' +
-          'argued about.'
-        ],
-        media: []
-      },
-
-      {
-        title: 'Frame-budgeted enemy scheduler',
-        tags: ['Frame budget', 'Round robin', 'Distance LOD'],
-        body: [
-          'With hundreds of active enemies, the cost that matters is not any single path ' +
-          'query but how many run in one frame. The processor enforces a hard ' +
-          '<strong>2 ms per-frame budget</strong> and stops when it is spent.',
-
-          'Work is drained from a round-robin queue so no enemy can starve behind a ' +
-          'permanently busy neighbour, and update rate is tiered by distance: enemies within ' +
-          '10 units repath every frame, within 20 units every other frame, and beyond that ' +
-          'are skipped until they matter.',
-
-          'The budgets are exposed as designer-editable config fields — requests per frame, ' +
-          'tiles physics-tested per frame during the startup scan, cells relaxed per frame ' +
-          'while rebuilding the flow field — so tuning does not require a programmer.'
-        ],
-        media: []
-      },
-
-      {
         title: 'Allocation elimination on combat hot paths',
-        tags: ['GC', 'NonAlloc', 'Profiling'],
+        tags: ['GC', 'NonAlloc', 'Hot path'],
         body: [
-          'Bullet-heaven combat fires constantly, so anything allocating per swing shows up ' +
-          'as GC pressure within seconds. I went through the fire and steering paths and ' +
-          'removed it:',
+          'Bullet-heaven combat fires constantly, so anything that allocates per shot or ' +
+          'per swing becomes GC pressure within seconds. I went through the fire and strike ' +
+          'paths and removed it.',
 
-          '<strong>Reused signal instances</strong> instead of constructing a fresh event ' +
-          'object per attack. <strong>Physics.OverlapSphereNonAlloc</strong> for targeting ' +
-          'queries. <strong>IReadOnlyList handoffs</strong> so sprite lists are passed without ' +
-          'copying. An <strong>enum-comparison guard</strong> that keeps the steering path ' +
-          'GC-free. Even the FMOD debug overlay reuses its string buffers so OnGUI does not ' +
-          'churn garbage every frame.'
+          'Swing signals are now <strong>reused instances</strong> rather than a fresh event ' +
+          'object per attack — the strike path writes into a pre-allocated signal instead of ' +
+          'constructing one. The automatic-weapon tick became a plain loop with no ' +
+          'allocations, replacing a per-tick signal dispatch.',
+
+          'Targeting queries deliberately avoid <code>Physics2D.OverlapCircleAll</code>, ' +
+          'which allocates a fresh array on every call. Sprite lists are handed over as ' +
+          '<code>IReadOnlyList&lt;Sprite&gt;</code> so there is no copy. Callbacks are cached ' +
+          'rather than passed as method groups, because a method group at the call site ' +
+          'allocates a delegate per strike.',
+
+          'Related fix: a lag spike from creating and destroying the hit-effect shader ' +
+          'material every time an enemy was struck, plus making the heavy attack async.'
         ],
         media: []
       },
@@ -174,18 +137,21 @@ const PROJECTS = [
         tags: ['Chunk streaming', 'Measurement', 'Editor tool'],
         body: [
           'The map originally streamed in chunks, activating and deactivating them from ' +
-          'player trigger volumes. Measured against real scenes, the toggling cost and its ' +
-          'edge cases outweighed what it saved.',
+          'player trigger volumes. It caused a visible hitch on every chunk switch, and once ' +
+          'measured, the toggling cost and its edge cases outweighed what it saved.',
 
           'So it went. Chunks are now enabled once and stay resident, a single startup ' +
           'obstacle bake replaces per-chunk rescans, off-screen decor animators are culled, ' +
-          'and the "which chunk am I in" question moved to a position-based lookup in the ' +
-          'player elevation service.',
+          'and the "which chunk am I in" question moved to a position-based lookup.',
 
-          'I wrote a batch editor tool to strip the abandoned trigger polygons out of the ' +
-          'existing scenes, and left the rationale in the code so the next person does not ' +
-          're-introduce it. This is the piece of work I would most want to talk through in ' +
-          'an interview — not because the system survived, but because it did not.'
+          'The commit deleted the chunk controller, the grid model and a now-pointless ' +
+          'signal class, and cut the grid controller by 222 lines — net 197 insertions ' +
+          'against 532 deletions. I also wrote a <strong>batch editor tool</strong> to strip ' +
+          'the abandoned trigger polygons out of the existing scenes, and left the rationale ' +
+          'in the code so nobody re-introduces it.',
+
+          'This is the piece of work I would most want to talk through in an interview — not ' +
+          'because the system survived, but because it did not.'
         ],
         media: []
       },
@@ -198,93 +164,140 @@ const PROJECTS = [
           'written in code. Eleven typed parameter classes — camera, movement, animation, ' +
           'narrative, music, SFX, VFX, screen fade, pop-up, wait, custom — each with a ' +
           'handler behind a common interface whose contract documents its own cost, because ' +
-          'handlers tick per frame per active action.',
+          'handlers run per frame per active action.',
 
           'The part I am most pleased with is the migration path. When the parameter system ' +
           'was refactored into typed classes, I shipped a <strong>parameter migrator</strong> ' +
-          'and a <strong>config validator</strong> alongside it, so the refactor carried the ' +
+          'and a <strong>config validator</strong> alongside it, plus custom property drawers ' +
+          'that make the action graph authorable in the inspector. The refactor carried the ' +
           'already-authored cutscenes across instead of asking the team to redo them.'
         ],
         media: []
       },
 
       {
-        title: 'Weapons, abilities and progression',
-        tags: ['Interface segregation', 'Factory', 'Object pool', 'Procedural'],
+        title: 'Weapons, aspects and progression',
+        tags: ['Interface segregation', 'Factory', 'Object pool'],
         body: [
           'Seven weapon categories behind segregated contracts — auto-attack, heavy attack, ' +
           'light attack and levelable are separate interfaces, so a weapon only implements ' +
-          'what it actually has. Heavy attacks resolve through dedicated geometry ' +
-          'calculators for cone and projectile-area shapes.',
+          'what it actually has. Heavy attacks resolve through dedicated geometry calculators ' +
+          'for cone and projectile-area shapes, and creation runs through a factory with a ' +
+          'documented clone-on-create rule so a weapon instance can never mutate the shared ' +
+          'database.',
 
-          'A <strong>procedural weapon generator</strong> rolls stats against a budget and ' +
-          'clones its source data on create, so generated weapons can never mutate the ' +
-          'shared database.',
+          'Weapon visuals use an <strong>index-based animation</strong> approach: the attack ' +
+          'clip fires one increment event per frame and the component steps through a ' +
+          'per-category sprite list, so adding a weapon does not mean authoring a new set of ' +
+          'animator clips.',
 
-          'On top of that: a weapon-aspect modifier framework (ricochet, recall, magnetic, ' +
-          'deluge), a level-up skill-card draft, elemental status effects (fire, wet, freeze, ' +
-          'mist) resolved through a spatial hash grid, and <strong>27 enemy archetypes ' +
-          'including 4 bosses</strong>, each with pooled views and its own factory.'
+          'On top sits a <strong>weapon-aspect modifier framework</strong> — ricochet, ' +
+          'recall, magnetic, deluge — each aspect its own config, model, controller and view, ' +
+          'and a <strong>skill-card draft</strong> on level-up. I also contributed to the ' +
+          'quest and pickup systems and to the projectile subsystem with its own factory and ' +
+          'pool.'
         ],
         media: []
       },
 
       {
-        title: 'Architecture across an eleven-person team',
-        tags: ['Zenject', 'MVC', 'UniRx', 'Signals'],
+        title: 'Split-body player animation',
+        tags: ['Index-driven', 'ScriptableObject', 'Signals'],
         body: [
-          'Strict model/view/controller separation across roughly fifteen systems, wired ' +
-          'through <strong>41 Zenject installers</strong> and about <strong>197 signal ' +
-          'types</strong>, with 127 interfaces and 122 ScriptableObject types behind the data.',
+          'The player animates as three coordinated layers — upper body, lower body and ' +
+          'full-body overrides — so aiming and movement can play independently without a ' +
+          'combinatorial explosion of animator states.',
 
-          'Continuous work runs on Zenject <code>ITickable</code> rather than scattered ' +
-          '<code>Update</code> methods, which keeps execution order explicit instead of ' +
-          'accidental. Reactive state is real rather than decorative: 199 files use UniRx, ' +
-          'with 397 reactive properties and 82 composite disposables for teardown. Async ' +
-          'work is UniTask-first — 102 files against only 16 still using coroutines.'
+          'Clips are resolved from ScriptableObject animation data by <strong>sprite ' +
+          'index</strong> rather than animator parameters, driven by signals, with an ' +
+          'attack-cone service supplying the geometry. The cone is recalculated on ' +
+          'initialisation and whenever a weapon resizes it — explicitly not per frame — and ' +
+          'the light-attack stream is torn down on weapon switch so there is zero per-frame ' +
+          'work when nothing is firing.'
         ],
         media: []
       },
 
       {
-        title: 'Tooling, audio, input and loading',
-        tags: ['EditorWindow', 'FMOD', 'Input System', 'Shader warmup'],
+        title: 'Enemy presentation: views, VFX and pooling',
+        tags: ['Object pooling', 'VFX', 'Spatialised audio'],
         body: [
-          '<strong>Editor animation previewer:</strong> a full EditorWindow for stepping ' +
-          'sprite animations — category and clip dropdowns, play/pause, speed multiplier, ' +
-          'frame stepping — which restores the target renderer’s original sprite when ' +
-          'closed so it cannot corrupt a scene. Plus an FMOD test harness with custom ' +
-          'editors and in-editor map generation buttons.',
+          'My work on the enemies is the presentation layer rather than their AI. That covers ' +
+          'the base enemy view and twelve per-archetype view classes, forward and backward ' +
+          'movement animation, the submerged effect, the shaman ring, projectile shaders, ' +
+          'unlit variants, and spatialised enemy SFX.',
 
-          '<strong>FMOD adaptive music:</strong> stems swap off gameplay signals — wave ' +
-          'start, boss spawn, boss closing in, boss death, player death — layered over the ' +
-          'running soundtrack through a VCA so the player’s volume settings still apply, ' +
-          'with exactly-once stop semantics.',
+          'Plus the pooling layer: separate pools for melee, shielded-melee, ranged, flying ' +
+          'and shaman enemies, a projectile-preview pool, and the elevation and positioning ' +
+          'services that place them correctly in the isometric space.'
+        ],
+        media: []
+      },
 
-          '<strong>Input:</strong> a full rebinding stack over Unity’s Input System — ' +
-          'action-map context switching, hold tracking, JSON binding-override persistence, ' +
-          'and automatic keyboard/gamepad scheme detection.',
+      {
+        title: 'FMOD adaptive music',
+        tags: ['FMOD', 'Signals', 'VCA'],
+        body: [
+          'Music responds to what is actually happening in a run. The controller subscribes ' +
+          'to gameplay signals — wave start, boss spawn, boss closing in on the player, boss ' +
+          'death, player death — and swaps stems accordingly, with separate intro-loop and ' +
+          'no-intro-loop variants so a transition never restarts a phrase awkwardly.',
 
-          '<strong>Loading:</strong> additive async scene loading with ' +
-          '<code>ShaderVariantCollection</code> warmup to kill first-frame shader-compile ' +
-          'hitches, plus four URP quality tiers wired to the options menu.'
+          'A layered-track service plays an event over the running soundtrack with ' +
+          'exactly-once stop semantics, routed through a VCA so the player’s volume ' +
+          'settings still apply to it.'
+        ],
+        media: []
+      },
+
+      {
+        title: 'Hitch-free scene loading',
+        tags: ['UniTask', 'Shader warmup', 'Quality tiers'],
+        body: [
+          'Additive async scene loading, with <code>ShaderVariantCollection</code> warmup ' +
+          'before the first frame renders so the player does not get a shader-compile hitch ' +
+          'the moment gameplay starts. Global warmup is deliberately skipped to avoid Shader ' +
+          'Graph keyword-space errors — that tradeoff is documented in the code.',
+
+          'Four URP quality tiers (Low, Medium, High, Ultra) are wired to the graphics ' +
+          'options menu so the game scales across the wide hardware range a PC release has ' +
+          'to cope with.'
+        ],
+        media: []
+      },
+
+      {
+        title: 'Nexus hub, kingdom building and the data layer',
+        tags: ['MVC', 'Zenject', 'JSON'],
+        body: [
+          'The hub between runs, where each building is a full model/view/controller triple: ' +
+          'the forge, permanent upgrades, storage, expedition and world portals, and a ' +
+          '<strong>navigation building</strong> that cycles between planets and drives the ' +
+          'portal. NPCs, dialogue triggers and story objects sit alongside it, with the hub ' +
+          'implementing the pause contract so its canvases can open safely.',
+
+          'Underneath, the data layer loads JSON into ScriptableObjects for game and weapon ' +
+          'data, with reactive run-state as a ScriptableObject so any system can observe the ' +
+          'current run without a static singleton.',
+
+          'Architecturally the project is strict MVC wired through Zenject, with continuous ' +
+          'work on <code>ITickable</code> rather than scattered <code>Update</code> methods, ' +
+          'which keeps execution order explicit instead of accidental. Reactive state is real ' +
+          'rather than decorative — UniRx across 199 files — and async is UniTask-first, 102 ' +
+          'files against 16 still using coroutines.'
         ],
         media: []
       },
 
       {
         title: 'Shaders and visual effects',
-        tags: ['Compute', 'Shader Graph', 'HLSL', 'VFX Graph'],
+        tags: ['HLSL', 'Shader Graph', 'VFX Graph'],
         body: [
-          'Seventeen project-authored shader files including <strong>three compute ' +
-          'shaders</strong> — among them a GPU A* variant explored on its own branch as an ' +
-          'alternative to the Burst path.',
-
-          'Hand-written HLSL for hit flash, dappled forest light, water waves, projectile ' +
-          'aura and sprite transparency; Shader Graph for attack previews, the shaman ring ' +
-          'and weapon alpha cutoff; a circle-fade UI transition. Seven VFX Graph assets back ' +
-          'the elemental status effects, driven from a per-element ScriptableObject shader ' +
-          'data layer.'
+          'Shader work on this project is split roughly evenly with another developer. My ' +
+          'contributions include hand-written HLSL and Shader Graph work for hit flash, ' +
+          'dappled forest light, water waves, projectile aura, sprite transparency, weapon ' +
+          'alpha cutoff and a circle-fade UI transition, along with a screen-shake shader ' +
+          'bug fix.'
         ],
         media: []
       }
@@ -292,124 +305,114 @@ const PROJECTS = [
   },
 
   /* ======================================================================
-     2. PROJECT JADUGHOR
+     2. MUSEUM KEEPER  (Godot original + Unity rebuild — one game)
      ====================================================================== */
   {
-    id: 'project-jadughor',
-    title: 'Jadughor',
-    titleNote: 'working title',
-    studio: 'Bad WiFi Interactive',
-    period: 'Mar 2026 — present',
-    status: 'In development',
-    statusTone: 'amber',
-    engine: 'Unity 6.3',
+    id: 'museum-keeper',
+    title: 'Museum Keeper',
+    studio: 'Red Thorn Interactive',
+    period: 'Sept 2023 — present',
+    status: 'Coming soon on Steam',
+    statusTone: 'violet',
+    engine: 'Godot 4 → Unity',
     language: 'C#',
     featured: true,
 
     tagline:
-      '2D mining and archaeology game where I am the sole developer — 98 of 100 ' +
-      'commits, 40,700 lines, and the architecture standard the codebase is held to.',
+      'Dig a procedurally generated mine for artifacts, then exhibit them in a museum. ' +
+      'Built in Godot 4, now being rebuilt in Unity — and I own the mine in both engines.',
 
     about: [
-      'You descend into a procedurally generated mine against a seven in-game-day clock, ' +
-      'break wall cells, place tools — dynamite in three sizes, an elevator, a pile ' +
-      'driver, torches — collect resources and historical artifacts, survive whatever ' +
-      'lives down there, and carry your finds back up. "Jadughor" is Bengali for museum.',
+      'Two connected games. Underground, you explore a procedurally generated mine full of ' +
+      'artifacts, minerals, traps and enemies — digging through terrain, fighting AI, and ' +
+      'using tools like dynamite and torches that genuinely affect the environment. ' +
+      'Artifacts you unearth can only be claimed by clearing a randomised mini-game; fail ' +
+      'and you lose the find. Above ground, claimed artifacts become exhibitions in a ' +
+      'separate isometric museum, drawing visitors and generating the currency you ' +
+      'reinvest in expanding it.',
 
-      'I built essentially all of it: mine generation, enemy AI, pathfinding, the pause ' +
-      'system, inventory, the toolbar and placeables, the boss lair, and the lighting. ' +
-      'What I would point at first, though, is not a feature. It is that I wrote the ' +
-      'engineering standard this codebase is held to, and the codebase actually holds to it.'
+      'The team splits along the same seam the game does: <strong>I own the mine, a ' +
+      'colleague owns the museum</strong>, and that division held across both engines. In ' +
+      'the Godot original I wrote 94% of the mine codebase; in the Unity rebuild I am the ' +
+      'only author the enemy system has ever had.',
+
+      'The rebuild is a genuine rewrite, not a conversion. The artifact data and sprite ' +
+      'assets carried over one-to-one, but every line of code was written from scratch — no ' +
+      'Godot script, scene or shader survives, and the Unity architecture (dependency ' +
+      'injection, reactive state, strict MVC) has no counterpart in the original. Getting ' +
+      'to build the same game twice, in two engines, is the most useful thing that has ' +
+      'happened to me as a programmer: it separated what I actually understood about ' +
+      'architecture from what was just engine habit.'
     ],
 
     metrics: [
-      { label: '477 C# files' },
-      { label: '~40,700 lines' },
-      { label: '98 / 100 commits' },
-      { label: 'URP 17.3 2D' },
-      { label: 'Zenject + UniRx + UniTask' }
+      { label: 'Godot: 1,421 commits, 5 devs' },
+      { label: 'Unity rebuild: 150 commits' },
+      { label: '94% of the Godot mine code' },
+      { label: '100% of the Unity enemy system' },
+      { label: 'Two engines, four years' }
     ],
 
-    cardMetrics: ['40,700 lines / 477 files', 'Sole developer', 'Zero Update() in 477 files'],
+    cardMetrics: ['Godot 4 → Unity', 'Owns the mine in both engines', '100% of the Unity enemy system'],
 
-    stack: ['Unity 6.3', 'C#', 'URP 2D', 'Zenject', 'UniRx', 'UniTask', 'Input System', 'Cinemachine 3', 'DOTween', 'Tilemaps'],
+    stack: ['Godot 4', 'Unity', 'C#', 'URP 2D', 'Zenject', 'UniRx', 'UniTask', 'ASP.NET Core', 'Finite state machines', 'A* pathfinding', 'Tilemaps', 'Cinemachine 3', 'DOTween'],
+
+    links: [
+      { label: 'View on Steam', url: 'https://store.steampowered.com/app/2708780/Museum_Keeper/' }
+    ],
 
     roles: [
-      { name: 'Sole Developer',   detail: 'Every shipped system in the project, from mine generation to boss lair.' },
-      { name: 'Architect',        detail: 'Authored the engineering standard and the enemy-system spec, then enforced both.' },
-      { name: 'AI Programmer',    detail: 'Three enemy species with full state machines, A* pathfinding, spawn and relocation.' },
-      { name: 'Systems Designer', detail: 'Procedural generation, inventory, toolbar, placeables, day/time, pause.' },
-      { name: 'Technical Artist',  detail: 'URP Light2D depth darkening, dynamic light sources, tilemap shadow and crack passes.' }
+      { name: 'Gameplay Programmer', detail: 'Mine generation, digging, combat, item usage and player control — in both engines.' },
+      { name: 'AI Programmer',       detail: 'Three enemy species with full state machines, A* pathfinding, spawning and relocation.' },
+      { name: 'Systems Designer',    detail: 'Procedural generation, inventory, toolbar and placeables, day/time, collectables.' },
+      { name: 'Technical Artist',    detail: 'URP Light2D depth darkening, dynamic light sources, tilemap shadow and crack passes.' },
+      { name: 'Audio Integrator',    detail: 'Contextual SFX and ambient music for movement, digging, combat and item use.' },
+      { name: 'Backend',             detail: 'Contributed to the ASP.NET Core REST service that served game data in the Godot build.' }
     ],
 
     mediaNote:
-      'Gameplay captures for this project are not published yet. Drop GIFs or MP4s into ' +
-      'assets/project-jadughor/ and add them to the matching feature in js/content.js.',
+      'The clips above are from the Godot original. Captures of the Unity rebuild are not ' +
+      'published yet — drop GIFs or MP4s into assets/museum-keeper/ and add them to the ' +
+      'matching feature in js/content.js.',
 
     features: [
       {
-        title: 'I wrote the architecture standard, and the code provably holds to it',
-        tags: ['SOLID', 'Zenject', 'IDisposable', 'Enforcement'],
+        title: 'Enemy AI in the Unity rebuild',
+        tags: ['Unity rebuild', 'State machine', 'A*', 'Cancellation'],
         body: [
-          'The project carries two engineering guides I authored — a 336-line standard for ' +
-          'the whole codebase and a 397-line specification for the enemy system. They set a ' +
-          'canonical folder layout per feature, define what each layer may and may not do, ' +
-          'require idempotent <code>IDisposable</code> on every behaviour-bearing controller ' +
-          'and model, and ban service locators and hidden singletons outright.',
-
-          'The strictest rule is a <strong>hard ban on <code>Update</code>, ' +
-          '<code>FixedUpdate</code>, <code>LateUpdate</code> and coroutines</strong>, in ' +
-          'favour of Zenject tickables bound at controller level with explicit ordering.',
-
-          'Anyone can write a standard. What matters is whether it survived contact with ' +
-          '40,000 lines, so here is the audit: <strong>zero</strong> ' +
-          '<code>Update</code>/<code>FixedUpdate</code>/<code>LateUpdate</code> and ' +
-          '<strong>zero</strong> coroutines across all 477 files. Exactly ' +
-          '<strong>six</strong> tickables in the entire project. Only <strong>26 ' +
-          'MonoBehaviours</strong> — about 5% of files — with the rest plain C# objects ' +
-          'constructed by the container. Every enemy AI in the game runs from a single ' +
-          'fixed-tick fan-out rather than per-enemy update methods.'
-        ],
-        media: []
-      },
-
-      {
-        title: 'Enemy AI: three species, three movement models',
-        tags: ['State machine', 'A*', 'Cancellation', 'Composition'],
-        body: [
-          'Three shipped enemies — a grounded slime, a flying bat, a crawling rattlesnake — ' +
-          'each built from the same eight-piece composition (config, model, view, state ' +
-          'machine, pool entry, pool, factory, controller) with state machines running ' +
-          '1,700, 1,560 and 1,940 lines respectively.',
+          'Three enemy species with genuinely different movement models — a grounded slime, ' +
+          'a flying bat, a crawling rattlesnake — each built from the same eight-piece ' +
+          'composition (config, model, view, state machine, pool entry, pool, factory, ' +
+          'controller), with state machines running 1,700, 1,560 and 1,940 lines.',
 
           'Pathfinding is a hand-written A* over a rebuildable navigation snapshot: Manhattan ' +
-          'heuristic, multi-destination search for "get to any of these cells", asymmetric ' +
+          'heuristic, a multi-destination search for "get to any of these cells", asymmetric ' +
           'edge costs so a drop is priced differently from a step, and <strong>cooperative ' +
           'cancellation polled every 64 node expansions</strong> so a long search can be ' +
-          'abandoned mid-flight rather than blocking.',
+          'abandoned mid-flight instead of blocking.',
 
           'Terrain changes constantly in a mining game, so the service keeps a ' +
           '<strong>navigation revision counter</strong> and an observable of changed cells — ' +
           'enemies react to the mine being dug rather than re-polling it. Path results are ' +
-          'generation-stamped so a result that arrives after the world moved on is discarded ' +
-          'instead of applied. Failed routes are cached against the revision that failed, so ' +
-          'an unreachable target is not retried every tick.'
+          'generation-stamped, so a result arriving after the world moved on is discarded ' +
+          'rather than applied, and failed routes are cached against the revision that ' +
+          'failed so an unreachable target is not retried every tick.'
         ],
         media: []
       },
 
       {
         title: 'Named bug classes, and the fixes',
-        tags: ['Debugging', 'Rigidbody2D', 'State machines'],
+        tags: ['Unity rebuild', 'Debugging', 'Rigidbody2D'],
         body: [
-          'Three AI failure modes I tracked down, fixed, and then wrote up in the spec so ' +
-          'they would not come back:',
+          'Three AI failure modes I tracked down, fixed, and then wrote up so they would not ' +
+          'come back:',
 
           '<strong>The bat wobble collider bug.</strong> Bats fly with a sinusoidal wobble, ' +
-          'and the wobble was being mixed into the rigidbody position — which meant the ' +
-          'physics body was constantly being shoved into geometry and getting stuck. The fix ' +
-          'was to make the wobble <em>visual only</em>, applied as a sprite offset, leaving ' +
-          'the collider on a clean interpolated path.',
+          'and the wobble was being mixed into the rigidbody position — so the physics body ' +
+          'was constantly being shoved into geometry and getting stuck. The fix was to make ' +
+          'the wobble <em>visual only</em>, applied as a sprite offset, leaving the collider ' +
+          'on a clean interpolated path.',
 
           '<strong>The fall landing-latch.</strong> The fall state needed an ungrounded frame ' +
           'before a grounded one to latch correctly, so entering fall now re-routes back to ' +
@@ -429,57 +432,90 @@ const PROJECTS = [
 
       {
         title: 'The relocation leash',
-        tags: ['Perf', 'Lifetime', 'Config validation'],
+        tags: ['Unity rebuild', 'Perf', 'Config validation'],
         body: [
-          'Without this, every spawned enemy ticks full AI for the entire mine session ' +
-          'regardless of where the player is — an unbounded cost that grows with how long ' +
-          'you have been digging.',
+          'Without this, every spawned enemy ticks full AI for the entire mine session no ' +
+          'matter where the player is — an unbounded cost that grows with how long you have ' +
+          'been digging.',
 
           'The leash accumulates per-enemy dwell time for "the player has been further than ' +
           'X tiles for Y seconds", then hands off. It deliberately does not despawn anything ' +
-          'itself — it decides <em>whether</em> an enemy should relocate, never how, so ' +
-          'there is no dependency cycle with the manager that owns spawning.',
+          'itself — it decides <em>whether</em> an enemy should relocate, never how, so there ' +
+          'is no dependency cycle with the manager that owns spawning.',
 
           'Rather than simply culling, relocation reuses the real despawn path and respawns ' +
           'the enemy near the player but <strong>outside the camera viewport</strong>, so ' +
           'encounter density stays constant while cost does not grow. The config validates ' +
-          'that maximum spawn distance is less than relocation distance — otherwise a ' +
-          'respawn lands out of range and immediately re-relocates, which is a loop I would ' +
-          'rather catch at author time than in a profiler.'
+          'that maximum spawn distance is less than relocation distance — otherwise a respawn ' +
+          'lands out of range and immediately re-relocates, a loop I would rather catch at ' +
+          'author time than in a profiler.'
         ],
         media: []
       },
 
       {
-        title: 'Procedural mine generation, entirely off the main thread',
-        tags: ['UniTask', 'Thread pool', 'Erosion', 'Random walk'],
+        title: 'Enemy AI in the Godot original',
+        tags: ['Godot original', 'FSM', 'Component-based'],
         body: [
-          'A seven-stage pipeline — cells, boss cave, caves, vines, backdrops, artifacts, ' +
-          'resources — where <strong>every stage opens by switching to the thread pool</strong> ' +
-          'and only returns to the main thread to commit its results. Generation cannot hitch ' +
-          'the frame because it is not on the frame. Everything uses ' +
-          '<code>System.Random</code> rather than Unity’s, precisely because it runs ' +
-          'off-thread.',
+          'The first version of the same problem, solved with a finite state machine over a ' +
+          'component-based architecture, with behaviour sets varying by enemy type — patrol, ' +
+          'rest, explore, attack.',
+
+          'Enemies move through phases that trigger specific actions once their conditions ' +
+          'are met, so encounters escalate rather than presenting one fixed behaviour until ' +
+          'death. Comparing this against the Unity rebuild is the clearest illustration of ' +
+          'what four years changed: same game, same enemy problem, far more rigour the second ' +
+          'time.'
+        ],
+        media: [
+          { type: 'gif', src: 'assets/museum-keeper/enemy-ai-fsm-01.gif', weight: '4.3 MB',
+            caption: 'FSM-driven enemy behaviour: patrol, aggro and attack phases.' },
+          { type: 'gif', src: 'assets/museum-keeper/enemy-ai-fsm-02.gif', weight: '2.8 MB',
+            caption: 'Enemy type variation and phase transitions in combat.' }
+        ]
+      },
+
+      {
+        title: 'Procedural mine generation, in both engines',
+        tags: ['Procedural', 'UniTask', 'Erosion', 'Random walk'],
+        body: [
+          '<strong>Godot version.</strong> A 2D world built from scratch — caves, minerals, ' +
+          'traps and artifacts placed dynamically, with the whole generation driven by ' +
+          'configurable data held in JSON rather than hard-coded, so designers could retune a ' +
+          'mine without a rebuild. Enemies spawn into valid areas according to difficulty and ' +
+          'player progress. The save system reuses that same generated JSON to <strong>' +
+          'visually reconstruct the exact last state</strong> of the mine through Godot’s ' +
+          'tilemap system — the save format and the generation format being one thing is what ' +
+          'made that cheap rather than a second serialisation problem.',
+
+          '<strong>Unity version.</strong> A seven-stage pipeline — cells, boss cave, caves, ' +
+          'vines, backdrops, artifacts, resources — where <strong>every stage opens by ' +
+          'switching to the thread pool</strong> and only returns to the main thread to ' +
+          'commit. Generation cannot hitch the frame because it is not on the frame. ' +
+          'Everything uses <code>System.Random</code> rather than Unity’s, precisely ' +
+          'because it runs off-thread.',
 
           'The algorithms are hand-rolled rather than noise-based. Caves are drawn from a ' +
-          'preset table of allowed rectangles, distributed over a 3x3 slot grid with the ' +
+          'preset table of allowed rectangles, distributed over a 3×3 slot grid with the ' +
           'centre-bottom slot reserved for the boss area, then made organic in two passes: ' +
           '<strong>edge erosion</strong> eats an irregular number of cells off the boundary, ' +
           'and <strong>interior corrosion</strong> punches small holes to read as worn rock. ' +
-          'Stalagmites and stalactites are then placed along the floor and ceiling rows.',
-
           'Resource deposits grow by <strong>random walk</strong> — pick a root cell, extend ' +
-          'to a random valid neighbour, stop at a dead end — with occupancy tracked in a ' +
-          'hash set for O(1) lookups and the inner adjacency loop using a stack array to stay ' +
-          'off the heap. Generation is kept strictly separate from presentation: a 1,373-line ' +
-          'visualizer layer turns the generated data into eleven tilemap passes.'
+          'to a random valid neighbour, stop at a dead end — with occupancy in a hash set for ' +
+          'O(1) lookups and the inner adjacency loop using a stack array to stay off the heap.',
+
+          'Generation is kept strictly separate from presentation: a 1,373-line visualizer ' +
+          'layer turns the generated data into eleven tilemap passes.'
         ],
-        media: []
+        media: [
+          { type: 'gif', src: 'assets/museum-keeper/procedural-mine-generation.gif', weight: '6.0 MB',
+            caption: 'Godot original: procedural mine generation with caves, minerals, traps and artifacts.' }
+        ]
       },
 
       {
         title: 'Fungal vegetation: an amortised growth queue',
-        tags: ['Amortised O(n)', 'Zero alloc', 'Camera aware'],
+        tags: ['Unity rebuild', 'Amortised O(n)', 'Zero alloc', 'Camera aware'],
         body: [
           'Mushrooms colonise mine surfaces you have broken open, over game time. The naive ' +
           'version rescans the broken-cell list every tick and rerolls each candidate, which ' +
@@ -499,41 +535,123 @@ const PROJECTS = [
 
           'My favourite detail is <strong>camera awareness</strong>: growth is suppressed ' +
           'inside the viewport plus a margin, so a mushroom never visibly pops into existence ' +
-          'in front of you. Blocked candidates keep their roll and retry once the camera ' +
-          'moves away, so nothing is lost — just deferred. Hard budgets cap it at 12 growths ' +
-          'and 96 candidate scans per tick, 250 total.'
+          'in front of you. Blocked candidates keep their roll and retry once the camera moves ' +
+          'away, so nothing is lost — just deferred. Hard budgets cap it at 12 growths and 96 ' +
+          'candidate scans per tick, 250 total.'
         ],
         media: []
       },
 
       {
-        title: 'Reference-counted pause with an awaitable gate',
-        tags: ['Ref counting', 'UniTask', 'State snapshots'],
+        title: 'Inventory system',
+        tags: ['Godot original', 'Stacking', 'Three-mode selection'],
         body: [
-          'Pause is usually where a codebase quietly breaks, because two things can pause at ' +
-          'once and one of them resumes first. Here every pauser carries an identity and the ' +
-          'controller <strong>reference-counts</strong> them — pause fires when the set goes ' +
-          'from empty to non-empty, resume only when it fully drains — so an inventory ' +
-          'screen opened during a cutscene nests safely.',
+          'Stack-based storage with per-slot quantities, built around three distinct ' +
+          'interactions so item handling stays fast without a modifier key:',
 
-          'The async half is a <strong>pause gate</strong> built on a UniTask completion ' +
-          'source. In-flight async sequences <em>park</em> at the gate and continue afterwards ' +
-          'instead of being cancelled and restarted, which is what makes pausing mid-transition ' +
-          'safe.',
+          '<strong>Lot select</strong> — left click takes the entire stack in that slot into ' +
+          'hand. <strong>Single select</strong> — right click takes one unit, and repeated ' +
+          'right clicks on the same item accumulate more into hand. <strong>Swap select' +
+          '</strong> — left clicking an item while already holding a different one exchanges ' +
+          'the two.'
+        ],
+        media: [
+          { type: 'gif', src: 'assets/museum-keeper/inventory-system.gif', weight: '428 KB',
+            caption: 'Lot, single and swap selection with per-slot quantities.' }
+        ]
+      },
 
-          'Rather than freezing timescale, each entity type <strong>snapshots</strong> exactly ' +
-          'what it needs — velocity, angular velocity, whether the body was simulated, ' +
-          'animator speed, whether damage was enabled — and restores it on unpause. ' +
-          'Registration goes through the signal bus, so a new pausable system does not require ' +
-          'touching the pause controller.'
+      {
+        title: 'Toolbar and contextual tool behaviour',
+        tags: ['Both engines', 'Strategy pattern', 'Placeables'],
+        body: [
+          'A scrollable toolbar integrated with the inventory — the top row of the three-row ' +
+          'inventory <em>is</em> the toolbar, so assigning a tool is a normal inventory move ' +
+          'rather than a separate binding step.',
+
+          'A controller then <strong>changes the player’s available actions based on the ' +
+          'selected item</strong>. The pickaxe breaks mine walls but does nothing to enemies; ' +
+          'the sword is the reverse. Visual feedback marks valid and invalid placement, so ' +
+          'the rules are legible before you swing.',
+
+          'The Unity rebuild takes this considerably further — 89 files where item actions are ' +
+          'swappable strategies (tool, weapon, placeable, consumable, animated) and each ' +
+          'placeable machine runs its own state machine: dynamite in three sizes, an ' +
+          'elevator, a pile driver, torches.'
+        ],
+        media: [
+          { type: 'gif', src: 'assets/museum-keeper/toolbar-system.gif', weight: '323 KB',
+            caption: 'Scrollable toolbar with slot assignment from the inventory.' },
+          { type: 'gif', src: 'assets/museum-keeper/toolbar-contextual-tools.gif', weight: '5.0 MB',
+            caption: 'Contextual tool behaviour: pickaxe for walls, sword for enemies.' }
+        ]
+      },
+
+      {
+        title: 'Physics, digging and item-environment interaction',
+        tags: ['Both engines', 'Destructible terrain', 'Knockback'],
+        body: [
+          'Responsive directional movement with attack and interact, gravity applied and ' +
+          'defied per entity as needed, and knockback on impact for both players and enemies ' +
+          'so trades in combat carry weight.',
+
+          'Terrain is destructible — players break and remove wall tiles to explore or carve ' +
+          'their own routes. Items act on the world rather than just on actors: ' +
+          '<strong>dynamite explodes and breaks walls</strong>, and a <strong>fire torch ' +
+          'ignites flammable objects and lights the area</strong>.',
+
+          'In the Unity rebuild, cells carry hit points and broken-edge state, and damage ' +
+          'shows as <strong>progressive directional crack sprites</strong> that update on the ' +
+          'pickaxe impact frame rather than on swing start — alongside directional screen ' +
+          'shake with graded intensity and pooled explosion smoke.'
+        ],
+        media: []
+      },
+
+      {
+        title: 'Lighting: depth-driven darkening',
+        tags: ['Unity rebuild', 'Light2D', 'Migration'],
+        body: [
+          'Mine ambience is driven by player depth through the URP global Light2D intensity. ' +
+          'Because lights sharing a blend style accumulate additively before the style is ' +
+          'applied, a torch near the player adds on top of the low ambient value and restores ' +
+          'normal brightness locally — which is what makes a single global light behave like ' +
+          'real darkness.',
+
+          'This replaced an unlit shader quad that no 2D light could ever cut through. I left ' +
+          'the old quad in the scene <em>disabled rather than deleted</em>, so the previous ' +
+          'look stays one checkbox away for comparison. Light sources register dynamically, ' +
+          'and a redundant-write guard skips intensity updates that would not change anything.'
+        ],
+        media: []
+      },
+
+      {
+        title: 'Mini-games, time system and audio',
+        tags: ['Godot original', 'Randomised', 'Timed events'],
+        body: [
+          '<strong>Mini-games</strong> gate artifact collection: digging one out throws a ' +
+          'random mini-game at you, and only clearing it itemises the artifact into your ' +
+          'inventory. Failing loses the find — which makes an artifact a risk rather than a ' +
+          'pickup.',
+
+          '<strong>Time system</strong> tracks how long you have been underground and deploys ' +
+          'events off it. Stay until midnight and the player passes out. The Unity rebuild ' +
+          'formalises this into a seven in-game-day run structure.',
+
+          '<strong>Audio</strong> covers ambient music plus contextual SFX for walking, ' +
+          'attacking, taking damage, digging and item use, so the mine reads as responsive ' +
+          'rather than silent.'
         ],
         media: []
       },
 
       {
         title: 'Boss lair as a rolled, separate arena',
-        tags: ['Weighted table', 'Cinemachine', 'Prefab tooling'],
+        tags: ['Unity rebuild', 'In progress', 'Prefab tooling'],
         body: [
+          '<em>Current in-progress work, not yet committed.</em>',
+
           'When a mine generates, a weighted spawn table rolls for whether a boss gate exists ' +
           'at all — and no boss is the normal case, not a failure. If one is rolled, a ' +
           'placement service finds a valid gate cell in the generated mine.',
@@ -541,9 +659,7 @@ const PROJECTS = [
           'The lair itself is a <strong>separate prefab arena</strong>, not part of the mine: ' +
           'entering and exiting are async transitions that retarget the Cinemachine confiner, ' +
           'restrict player abilities inside, and guarantee a valid game state on death or ' +
-          'teardown. Decor is built once with no per-tick cost. The system also documents a ' +
-          'deliberate absence — nothing registers a tick, because nothing in the lair needs ' +
-          'per-frame work yet.',
+          'teardown. Decor is built once with no per-tick cost.',
 
           'Hand-authoring that arena was the main source of "the player falls through the ' +
           'floor" bugs, because the wall tilemap has to carry a specific collider pair on a ' +
@@ -556,33 +672,53 @@ const PROJECTS = [
       },
 
       {
-        title: 'Lighting, tools and feel',
-        tags: ['Light2D', 'Strategy pattern', 'Screen shake'],
+        title: 'The engineering standard, and its enforcement',
+        tags: ['Unity rebuild', 'SOLID', 'Zenject', 'Audited'],
         body: [
-          '<strong>Depth-driven darkening.</strong> Mine ambience is driven by player depth ' +
-          'through the URP global Light2D intensity. Because lights sharing a blend style ' +
-          'accumulate additively before the style applies, a torch near the player adds on top ' +
-          'of the low ambient and restores normal brightness locally. This replaced an unlit ' +
-          'shader quad that no 2D light could cut through — and I left the old quad in the ' +
-          'scene <em>disabled rather than deleted</em>, so the previous look stays one ' +
-          'checkbox away for comparison.',
+          'The Unity rebuild is held to a written engineering standard I defined: a canonical ' +
+          'folder layout per feature, explicit rules for what each layer may and may not do, ' +
+          'mandatory idempotent <code>IDisposable</code> on every behaviour-bearing controller ' +
+          'and model, no service locators and no hidden singletons — and a <strong>hard ban ' +
+          'on <code>Update</code>, <code>FixedUpdate</code>, <code>LateUpdate</code> and ' +
+          'coroutines</strong> in favour of dependency-injected tickables with explicit ' +
+          'ordering.',
 
-          '<strong>Toolbar and placeables.</strong> An 89-file system: a hotbar plus item ' +
-          'action handlers as swappable strategies (tool, weapon, placeable, consumable, ' +
-          'animated), and placeable machines that each run their own state machine — ' +
-          'elevator, pile driver, dynamite in three sizes, torch.',
+          'Rules are easy to write and hard to keep, so the number that matters is the audit. ' +
+          'Across all 477 files: <strong>zero</strong> <code>Update</code>, ' +
+          '<code>FixedUpdate</code> or <code>LateUpdate</code> methods and <strong>zero' +
+          '</strong> coroutines. Exactly <strong>six</strong> tickables in the whole project. ' +
+          'Only <strong>26 MonoBehaviours</strong> — about 5% of files — with the rest plain ' +
+          'C# objects constructed by the container. Every enemy in the game runs from a single ' +
+          'fixed-tick fan-out rather than per-enemy update methods.',
 
-          '<strong>Feel.</strong> Directional Cinemachine 3 screen shake with graded ' +
-          'intensity levels and full pause awareness; progressive directional crack sprites ' +
-          'that update on the pickaxe impact frame rather than on swing start; pooled ' +
-          'explosion smoke.',
+          'Supporting that: a typed event bus constrained to structs so signal payloads never ' +
+          'allocate, an AI state tracer where every method is <code>[Conditional]</code> so ' +
+          'both the calls and their argument expressions compile out of release builds, and ' +
+          '<code>Validate()</code> contracts on configs and views so authoring mistakes fail ' +
+          'at init with a readable message.'
+        ],
+        media: []
+      },
 
-          '<strong>Debugging.</strong> An AI state tracer where every method is ' +
-          '<code>[Conditional]</code>, so both the calls and their argument expressions ' +
-          'compile out of release builds — because a raw log on the fixed-update path ' +
-          'allocates. Plus a live grid-coordinate overlay, and <code>Validate()</code> ' +
-          'contracts on configs and views so authoring mistakes fail at init with a readable ' +
-          'message.'
+      {
+        title: 'Pause, transitions and supporting systems',
+        tags: ['Unity rebuild', 'Ref counting', 'UniTask'],
+        body: [
+          'Pause is usually where a codebase quietly breaks, because two things can pause at ' +
+          'once and one of them resumes first. Here every pauser carries an identity and the ' +
+          'controller <strong>reference-counts</strong> them — pause fires when the set goes ' +
+          'from empty to non-empty, resume only when it fully drains — so an inventory screen ' +
+          'opened during a transition nests safely.',
+
+          'The async half is a <strong>pause gate</strong> built on a UniTask completion ' +
+          'source: in-flight sequences <em>park</em> at the gate and continue afterwards ' +
+          'instead of being cancelled and restarted. Rather than freezing timescale, each ' +
+          'entity type snapshots exactly what it needs — velocity, angular velocity, whether ' +
+          'the body was simulated, animator speed, damage flags — and restores it on unpause.',
+
+          'Alongside: camp-to-mine transitions with their own routes and state, a notification ' +
+          'bar, health and stamina, day and time, pooled collectables with magnet-style ' +
+          'collection, and a live grid-coordinate debug overlay.'
         ],
         media: []
       }
@@ -670,8 +806,9 @@ const PROJECTS = [
 
           'Battle calculation resolves from the type and role of both attacker and defender ' +
           'rather than a flat damage number. Animations are synchronised to the resolved ' +
-          'action with <strong>defined priorities</strong> so simultaneous effects do not fight ' +
-          'each other, and sound is contextual down to unique selection cues per pawn role.'
+          'action with <strong>defined priorities</strong> so simultaneous effects do not ' +
+          'fight each other, and sound is contextual down to unique selection cues per pawn ' +
+          'role.'
         ],
         media: [
           { type: 'mp4', src: 'assets/alexanderball/battle-mechanics.mp4',
@@ -778,177 +915,7 @@ const PROJECTS = [
   },
 
   /* ======================================================================
-     4. MUSEUM KEEPER
-     ====================================================================== */
-  {
-    id: 'museum-keeper',
-    title: 'Museum Keeper',
-    studio: 'Red Thorn Interactive',
-    period: 'Dec 2021 — Aug 2024',
-    status: 'Coming soon on Steam',
-    statusTone: 'violet',
-    engine: 'Godot 4',
-    language: 'C#',
-    featured: false,
-
-    tagline:
-      '2D side-scroller where you dig a procedurally generated mine for artifacts, then ' +
-      'exhibit them in an isometric museum. Built in Godot 4.',
-
-    about: [
-      'Two connected games. Underground, you explore a procedurally generated mine full of ' +
-      'artifacts, minerals, traps and enemies — digging through terrain, fighting AI, and ' +
-      'using tools like dynamite and torches that genuinely affect the environment. ' +
-      'Artifacts you unearth can only be claimed by clearing a randomised mini-game; fail ' +
-      'and you lose the find.',
-
-      'Above ground, claimed artifacts become exhibitions in a separate isometric museum ' +
-      'scene, drawing visitors and generating the currency you reinvest in expanding it.',
-
-      'This was also my Godot project — most of my other work is Unity, and building a ' +
-      'full game in a second engine forced me to separate what I actually understood about ' +
-      'architecture from what was just Unity habit.'
-    ],
-
-    metrics: [
-      { label: 'Godot 4' },
-      { label: 'JSON-driven generation' },
-      { label: 'FSM enemy AI' },
-      { label: 'Save/load reconstruction' }
-    ],
-
-    cardMetrics: ['Godot 4 + C#', 'Procedural mine + FSM AI', 'JSON-driven save/load'],
-
-    stack: ['Godot 4', 'C#', 'Component-based architecture', 'Finite state machines', 'Tilemaps', 'JSON'],
-
-    links: [
-      { label: 'View on Steam', url: 'https://store.steampowered.com/app/2708780/Museum_Keeper/' }
-    ],
-
-    roles: [
-      { name: 'Gameplay Programmer', detail: 'Procedural world generation, digging, combat, enemy AI, item use, player control.' },
-      { name: 'Systems Designer',    detail: 'Mine generation, inventory and toolbar logic, item-environment interaction, timed events.' },
-      { name: 'UI/UX Developer',     detail: 'Inventory, toolbar, ability interface, and time tracking.' },
-      { name: 'Technical Designer',  detail: 'Prototyped AI behaviour, item logic, mini-game mechanics.' },
-      { name: 'Audio Integrator',    detail: 'Contextual SFX and ambient music for movement, digging, combat and item use.' },
-      { name: 'Code Architect',      detail: 'Component-based design and FSM patterns for a scalable structure.' }
-    ],
-
-    features: [
-      {
-        title: 'Procedural mine generation with reconstructive save/load',
-        tags: ['Procedural', 'JSON config', 'Tilemap'],
-        body: [
-          'A 2D world built from scratch — caves, minerals, traps and artifacts placed ' +
-          'dynamically, with the whole generation driven by configurable data held in JSON ' +
-          'rather than hard-coded, so designers could retune a mine without a rebuild.',
-
-          'Enemies spawn into valid areas of the mine according to difficulty level and player ' +
-          'progress, rather than at fixed points.',
-
-          'The save system reuses that same generated JSON to <strong>visually reconstruct the ' +
-          'exact last state</strong> of the mine through Godot’s 2D tilemap system — the ' +
-          'save format and the generation format being the same thing is what makes that ' +
-          'cheap rather than a second serialisation problem.'
-        ],
-        media: [
-          { type: 'gif', src: 'assets/museum-keeper/procedural-mine-generation.gif', weight: '6.0 MB',
-            caption: 'Procedural mine generation with caves, minerals, traps and artifacts.' }
-        ]
-      },
-      {
-        title: 'Enemy AI',
-        tags: ['FSM', 'Component-based', 'Phases'],
-        body: [
-          'Enemy behaviour is a finite state machine over a component-based architecture, with ' +
-          'behaviour sets varying by enemy type — patrol, rest, explore, attack.',
-
-          'Enemies move through phases that trigger specific actions once their conditions are ' +
-          'met, so encounters escalate rather than presenting one fixed behaviour until death.'
-        ],
-        media: [
-          { type: 'gif', src: 'assets/museum-keeper/enemy-ai-fsm-01.gif', weight: '4.3 MB',
-            caption: 'FSM-driven enemy behaviour: patrol, aggro and attack phases.' },
-          { type: 'gif', src: 'assets/museum-keeper/enemy-ai-fsm-02.gif', weight: '2.8 MB',
-            caption: 'Enemy type variation and phase transitions in combat.' }
-        ]
-      },
-      {
-        title: 'Inventory system',
-        tags: ['Stacking', 'Three-mode selection'],
-        body: [
-          'Stack-based storage with per-slot quantities, built around three distinct ' +
-          'interactions so item handling stays fast without a modifier key:',
-
-          '<strong>Lot select</strong> — left click takes the entire stack in that slot into ' +
-          'hand. <strong>Single select</strong> — right click takes one unit, and repeated ' +
-          'right clicks on the same item accumulate more into hand. <strong>Swap ' +
-          'select</strong> — left clicking an item while already holding a different one ' +
-          'exchanges the two.'
-        ],
-        media: [
-          { type: 'gif', src: 'assets/museum-keeper/inventory-system.gif', weight: '428 KB',
-            caption: 'Lot, single and swap selection with per-slot quantities.' }
-        ]
-      },
-      {
-        title: 'Toolbar with contextual tool behaviour',
-        tags: ['Inventory-integrated', 'Contextual actions'],
-        body: [
-          'A scrollable toolbar integrated with the inventory — the top row of the three-row ' +
-          'inventory <em>is</em> the toolbar, so assigning a tool is a normal inventory move ' +
-          'rather than a separate binding step.',
-
-          'A controller then <strong>changes the player’s available actions based on the ' +
-          'selected item</strong>. The pickaxe breaks mine walls but does nothing to enemies; ' +
-          'the sword is the reverse. Visual feedback marks valid and invalid placement, so ' +
-          'the rules are legible before you swing.'
-        ],
-        media: [
-          { type: 'gif', src: 'assets/museum-keeper/toolbar-system.gif', weight: '323 KB',
-            caption: 'Scrollable toolbar with slot assignment from the inventory.' },
-          { type: 'gif', src: 'assets/museum-keeper/toolbar-contextual-tools.gif', weight: '5.0 MB',
-            caption: 'Contextual tool behaviour: pickaxe for walls, sword for enemies.' }
-        ]
-      },
-      {
-        title: 'Physics, digging and item-environment interaction',
-        tags: ['Rigidbody', 'Knockback', 'Destructible terrain'],
-        body: [
-          'Responsive directional movement with attack and interact, gravity applied and ' +
-          'defied per entity as needed, and knockback on impact for both players and enemies ' +
-          'so trades in combat carry weight.',
-
-          'Terrain is destructible — players break and remove wall tiles to explore or carve ' +
-          'their own routes. Items act on the world rather than just on actors: ' +
-          '<strong>dynamite explodes and breaks walls</strong>, and a <strong>fire torch ' +
-          'ignites flammable objects and lights the area</strong>.'
-        ],
-        media: []
-      },
-      {
-        title: 'Mini-games, time system and audio',
-        tags: ['Randomised', 'Timed events', 'Contextual SFX'],
-        body: [
-          '<strong>Mini-games</strong> gate artifact collection: digging one out throws a ' +
-          'random mini-game at you, and only clearing it itemises the artifact into your ' +
-          'inventory. Failing loses the find — which makes an artifact a risk rather than a ' +
-          'pickup.',
-
-          '<strong>Time system</strong> tracks how long you have been underground and deploys ' +
-          'events off it. Stay until midnight and the player passes out.',
-
-          '<strong>Audio</strong> covers ambient music plus contextual SFX for walking, ' +
-          'attacking, taking damage, digging and item use, so the mine reads as responsive ' +
-          'rather than silent.'
-        ],
-        media: []
-      }
-    ]
-  },
-
-  /* ======================================================================
-     5. AR INTERIOR WALLPAPER APP
+     4. AR INTERIOR WALLPAPER APP
      ====================================================================== */
   {
     id: 'ar-wallpaper',
@@ -984,8 +951,8 @@ const PROJECTS = [
         title: 'Demonstration',
         tags: ['AR', 'Surface detection'],
         body: [
-          'Applying and swapping wallpaper designs on real walls in real time, with a catalogue ' +
-          'interface for moving between options without leaving the AR view.'
+          'Applying and swapping wallpaper designs on real walls in real time, with a ' +
+          'catalogue interface for moving between options without leaving the AR view.'
         ],
         media: [
           { type: 'youtube', src: 'ew1JnGqf4Vw', caption: 'AR wallpaper preview demonstration.' }
@@ -1006,7 +973,7 @@ const PROJECTS = [
   },
 
   /* ======================================================================
-     6. BONGERS
+     5. BONGERS
      ====================================================================== */
   {
     id: 'bongers',
@@ -1067,7 +1034,7 @@ const PROJECTS = [
   },
 
   /* ======================================================================
-     7. WHAT FLIES
+     6. WHAT FLIES
      ====================================================================== */
   {
     id: 'what-flies',
@@ -1113,29 +1080,29 @@ const PROJECTS = [
 const SKILLS = [
   {
     group: 'Languages & Engines',
-    items: ['C#', 'Unity 3D (6.x, URP 2D)', 'Godot 4', 'Java', 'Dart', 'C++ (Arduino)', 'HLSL / Compute shaders']
+    items: ['C#', 'Unity 3D (6.x, URP 2D)', 'Godot 4', 'Java', 'Dart', 'C++ (Arduino)', 'HLSL', 'Shader Graph']
   },
   {
     group: 'Architecture & Patterns',
     items: ['MVC / MVP', 'SOLID', 'Dependency injection (Zenject)', 'Component-based architecture',
-            'Observer / signal bus', 'State pattern', 'Factory', 'Object pooling', 'Strategy',
-            'Repository / Unit of Work', 'ScriptableObject-driven data']
+            'Observer / signal bus', 'State pattern', 'Strategy', 'Factory + Registry',
+            'Object pooling', 'ScriptableObject-driven data']
   },
   {
     group: 'Algorithms & AI',
-    items: ['A* pathfinding', 'Flow-field steering', 'Finite state machines', 'Procedural generation',
-            'Spatial hashing', 'Random-walk growth', 'Erosion / corrosion passes']
+    items: ['A* pathfinding', 'Finite state machines', 'Procedural generation',
+            'Random-walk growth', 'Erosion / corrosion passes', 'Weighted spawn tables']
   },
   {
     group: 'Performance',
-    items: ['Burst + Jobs', 'NativeArray / NativeHashMap', 'Frame budgeting', 'Distance-tiered LOD',
-            'Allocation-free hot paths', 'Object pooling', 'Off-main-thread generation (UniTask)',
-            'Shader variant warmup', '2D occlusion culling']
+    items: ['Allocation-free hot paths', 'NonAlloc physics queries', 'Object pooling',
+            'Off-main-thread generation (UniTask)', 'Per-tick work budgets',
+            'Camera-aware culling', 'Async scene loading + shader warmup']
   },
   {
     group: 'Frameworks & Middleware',
     items: ['Zenject / Extenject', 'UniRx', 'UniTask', 'FMOD Studio', 'Unity Input System',
-            'Cinemachine', 'DOTween', 'Addressables', 'Mirror', 'Netcode', 'Firebase']
+            'Cinemachine', 'DOTween', 'ASP.NET Core', 'Addressables', 'Mirror', 'Netcode', 'Firebase']
   },
   {
     group: 'Tools & Pipeline',
@@ -1150,10 +1117,11 @@ const EXPERIENCE = [
     role: 'Gameplay Programmer',
     period: 'Sept 2024 — present',
     points: [
-      'Top contributor of eleven on <strong>Kingdoms of the Cosmos</strong> — 997 of 2,427 commits across a 78,000-line Unity 6.5 codebase.',
-      'Sole developer and architect of <strong>Jadughor</strong> — 98 of 100 commits across 477 files, including the engineering standard the codebase is held to.',
-      'Built Burst/Jobs A* pathfinding, flow-field horde steering, and a 2 ms-per-frame enemy scheduler with distance-tiered update rates.',
-      'Delivered editor tooling for other disciplines: animation previewer, cutscene property drawers, config validators, and a data migrator that preserved authored content through a refactor.'
+      'Top contributor of nine on <strong>Starfallen Prince</strong> — 997 of 2,427 commits across a 78,000-line Unity 6.5 codebase.',
+      'Own the weapon stack, cutscene sequencer, player animation and Nexus hub systems, holding 95–100% of the live code in each.',
+      'Eliminated GC pressure across the combat hot paths — reused signal instances, NonAlloc physics queries, and cached callbacks in place of per-strike delegate allocation.',
+      'Reworked map chunk streaming into resident chunks after measuring the switching cost, and shipped a batch editor tool to migrate the existing scenes.',
+      'Delivered cutscene tooling for the wider team: custom property drawers, a config validator, and a parameter migrator that preserved already-authored content through a refactor.'
     ]
   },
   {
@@ -1162,9 +1130,10 @@ const EXPERIENCE = [
     period: 'Dec 2021 — Aug 2024',
     points: [
       'Shipped <strong>AlexanderBall: A Countryball Tale</strong> to Steam with roughly 8,000 sales, on a team of three over 18 months.',
-      'Built <strong>Museum Keeper</strong> in Godot 4 — procedural mine generation, FSM enemy AI, inventory and toolbar systems, and JSON-driven save/load.',
+      'Built the mine half of <strong>Museum Keeper</strong> in Godot 4 — 94% of the mine codebase on a 1,421-commit project with five contributors — and continued the work into an ongoing Unity rebuild where I am the sole author of the enemy system.',
+      'Implemented A* pathfinding on a ~150-node battle grid driving move-range highlighting, path preview, target validation and pre-attack damage prediction.',
       'Automated Animator Controller setup across 21 pawn types and 7 variations — 147 unique animations — with a custom editor tool.',
-      'Combat systems, turn-based logic, skill trees, campaign and local multiplayer, plus audio integration and QA across both titles.'
+      'Contributed to the ASP.NET Core REST backend that served game data to the Godot build.'
     ]
   },
   {
@@ -1214,3 +1183,102 @@ const ACHIEVEMENTS = [
     detail: 'Completed the 21 km half marathon in 2017.'
   }
 ];
+
+/* ============================================================================
+   NEW_PROJECT_TEMPLATE
+   ----------------------------------------------------------------------------
+   HOW TO ADD A NEW PROJECT — four steps, no HTML to touch:
+
+     1. Make the media folder:   assets/my-new-game/
+        and drop your GIFs / MP4s / posters in it.
+
+     2. Copy the object below (without the comment markers) into the PROJECTS
+        array above. WHERE you put it in the array is where it appears on the
+        site — position is how you rank your work.
+
+     3. Set `id` to exactly match the folder name. It becomes the page URL:
+        project.html?id=my-new-game
+
+     4. Reload. The card shows up on the home page automatically, and in the
+        "Other projects" strip at the bottom of every other project page.
+
+   Only `id`, `title` and `tagline` are actually required. Leave anything else
+   out and it simply does not render — no placeholder, no error.
+
+   ----------------------------------------------------------------------------
+{
+  id:       'my-new-game',        // REQUIRED. Must match the assets/ folder name.
+  title:    'My New Game',        // REQUIRED.
+  titleNote: 'working title',     // optional, shown in brackets after the title
+  studio:   'Studio name',        // or 'Personal project'
+  period:   '2026 — present',
+  status:   'In development',     // free text on the badge
+  statusTone: 'amber',            // 'accent' = shipped (green)
+                                  // 'amber'  = in development
+                                  // 'violet' = prototype / coming soon
+  engine:   'Unity 6.5',
+  language: 'C#',
+  featured: true,                 // true adds the accent bar down the card edge
+
+  tagline: 'One sentence. Used on the card AND under the page title.',   // REQUIRED
+
+  about: [
+    'One string per paragraph. This is the "About the project" section.',
+    'Add as many as you like.'
+  ],
+
+  metrics: [                      // the monospace strip under the page title
+    { label: '12,000 lines' },
+    { label: 'Team of 4' }
+  ],
+
+  cardMetrics: [                  // short bullets on the home-page card
+    '12,000 lines',
+    'Team of 4'
+  ],
+
+  stack: ['Unity', 'C#', 'Zenject'],           // small chips in a "Stack" section
+
+  links: [                                     // buttons under the page title
+    { label: 'View on Steam', url: 'https://store.steampowered.com/app/...' }
+  ],
+
+  roles: [                                     // the "My contribution" list
+    { name: 'Gameplay Programmer', detail: 'What you actually did.' },
+    { name: 'Tool Developer',      detail: 'And here.' }
+  ],
+
+  mediaNote: 'Optional note printed at the end of the features section.',
+
+  features: [
+    {
+      title: 'A system you built',
+      tags: ['A*', 'Pooling'],                 // small monospace chips
+      body: [
+        'One string per paragraph. You can use <strong>bold</strong>, ' +
+        '<em>italic</em>, <code>Type.Method()</code> and ' +
+        '<a href="https://example.com">links</a> in here.'
+      ],
+      media: [
+        // A GIF. Click-to-play: never downloads until the viewer asks.
+        { type: 'gif',   src: 'assets/my-new-game/clip.gif',
+          weight: '2.4 MB',                    // shown on the play button
+          caption: 'What this clip shows.' },
+
+        // A video. preload="none", so it costs nothing until played.
+        { type: 'mp4',   src: 'assets/my-new-game/clip.mp4',
+          poster: 'assets/my-new-game/clip-poster.png',
+          caption: 'What this video shows.' },
+
+        // A YouTube video. `src` is the bare id from the URL, nothing else.
+        { type: 'youtube', src: 'dQw4w9WgXcQ',
+          caption: 'What this video shows.' },
+
+        // A still image, lazy-loaded.
+        { type: 'image', src: 'assets/my-new-game/screenshot.png',
+          caption: 'What this shows.' }
+      ]
+    }
+  ]
+}
+   ============================================================================ */
