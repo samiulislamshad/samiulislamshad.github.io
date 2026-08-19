@@ -30,9 +30,14 @@ That's it. Reload the page.
 | `type` | Behaviour | Fields |
 |---|---|---|
 | `gif` | Click-to-play. Never auto-downloads. | `src`, `weight` (shown on the button), optional `poster` |
-| `mp4` | `preload="none"` — costs nothing until played | `src`, `poster` |
+| `mp4` **with** a poster | Shows the poster frame; `preload="none"` so it costs nothing until played | `src`, `poster` |
+| `mp4` **without** a poster | Click-to-play button, same as a GIF | `src`, `weight` |
 | `youtube` | Click-to-load facade, `youtube-nocookie.com` | `src` = the bare video id, e.g. `o-SxnOoPk84` |
 | `image` | Plain lazy-loaded still | `src` |
+
+A poster-less `<video preload="none">` paints a black rectangle, which is why it
+falls back to a click-to-play button instead. If you can grab a still frame, add a
+`poster` and it will show that instead — nicer, but not required.
 
 `caption` is optional on all of them and doubles as the alt text.
 
@@ -67,9 +72,20 @@ and paste it into the `PROJECTS` array. Four steps:
    "Other projects" strip on every other project page.
 
 Only `id`, `title` and `tagline` are required — leave anything else out and it
-simply does not render. `featured: true` adds the accent bar on the card, and
-`statusTone` accepts `'accent'` (green — shipped), `'amber'` (in development),
-or `'violet'` (prototype / coming soon).
+simply does not render.
+
+Useful optional fields:
+
+| Field | Effect |
+|---|---|
+| `featured: true` | Accent bar down the card edge |
+| `earlier: true` | Moves the project into the **Earlier work** section at the bottom of the home page |
+| `repo: '<url>'` | Adds a "View source on GitHub" button to the project page |
+| `links: [{label, url}]` | Primary buttons — e.g. a Steam or itch.io link |
+| `statusTone` | `'accent'` (shipped/playable, green), `'amber'` (in development), `'violet'` (prototype) |
+
+The Earlier work section hides itself automatically if no project is flagged
+`earlier`.
 
 ### Other editable blocks
 

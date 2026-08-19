@@ -10,6 +10,8 @@
        run from 300 KB to 6 MB and auto-loading them all would cost ~29 MB on
        first paint.
      - <video> uses preload="none", so an MP4 costs nothing until played.
+       An MP4 WITHOUT a `poster` gets the same click-to-play placeholder as a
+       GIF, because preload="none" with no poster paints a black rectangle.
      - YouTube renders as a facade: no iframe (and so no YouTube player, no
        cookies, no tracking script) is created until the viewer clicks. Note the
        placeholder thumbnail IS fetched from YouTube's image CDN on load -- if
@@ -105,7 +107,9 @@
     if (m.type === 'gif') {
       frame.appendChild(gifPlaceholder(m, frame));
     } else if (m.type === 'mp4') {
-      frame.appendChild(videoNode(m));
+      // With a poster we can show the video element straight away; without one
+      // preload="none" would paint a black box, so use a placeholder instead.
+      frame.appendChild(m.poster ? videoNode(m) : videoPlaceholder(m, frame));
     } else if (m.type === 'youtube') {
       frame.appendChild(youtubePlaceholder(m, frame));
     } else {
@@ -146,6 +150,27 @@
       img.src = m.src;
       frame.innerHTML = '';
       frame.appendChild(img);
+    });
+
+    return btn;
+  }
+
+  function videoPlaceholder(m, frame) {
+    var btn = el('button', 'media-play');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Play video: ' + (m.caption || 'gameplay clip'));
+
+    btn.appendChild(el('span', 'play-icon', '&#9654;'));
+    btn.appendChild(txt('span', 'play-label', 'Play video'));
+    if (m.weight) {
+      btn.appendChild(txt('span', 'play-weight', m.weight + ' video'));
+    }
+
+    btn.addEventListener('click', function () {
+      var v = videoNode(m);
+      v.autoplay = true;
+      frame.innerHTML = '';
+      frame.appendChild(v);
     });
 
     return btn;
@@ -246,7 +271,9 @@
   function renderFooter(host) {
     var wrap = el('div', 'wrap');
     wrap.appendChild(txt('div', null, SITE.name + ' — ' + SITE.role + ', ' + SITE.location));
-    wrap.appendChild(txt('div', 'foot-mono', 'Hand-written HTML, CSS and JS. No build step.'));
+    var meta = 'Hand-written HTML, CSS and JS. No build step.';
+    if (SITE.updated) meta = 'Last updated ' + SITE.updated + '  ·  ' + meta;
+    wrap.appendChild(txt('div', 'foot-mono', meta));
     host.appendChild(wrap);
   }
 
@@ -271,6 +298,9 @@
     var hero = document.getElementById('hero-content');
     hero.appendChild(txt('h1', null, SITE.name));
     hero.appendChild(txt('p', 'hero-role', SITE.role + '  ·  ' + SITE.location));
+    if (SITE.availability) {
+      hero.appendChild(txt('p', 'hero-availability', SITE.availability));
+    }
     hero.appendChild(txt('p', 'hero-blurb', SITE.blurb));
 
     var actions = el('div', 'hero-actions');
@@ -293,11 +323,24 @@
     });
     hero.appendChild(strip);
 
-    /* projects */
+    /* projects — `earlier: true` drops a project into the secondary grid so the
+       main grid stays strong. Both grids render from the same PROJECTS array. */
     var grid = document.getElementById('project-grid');
+    var earlierGrid = document.getElementById('earlier-grid');
+    var earlierCount = 0;
+
     PROJECTS.forEach(function (p) {
-      grid.appendChild(projectCard(p));
+      if (p.earlier && earlierGrid) {
+        earlierGrid.appendChild(projectCard(p));
+        earlierCount++;
+      } else {
+        grid.appendChild(projectCard(p));
+      }
     });
+
+    // Hide the whole Earlier work section if nothing is flagged for it.
+    var earlierSection = document.getElementById('earlier');
+    if (earlierSection && earlierCount === 0) earlierSection.hidden = true;
 
     /* skills */
     var skillHost = document.getElementById('skill-groups');
@@ -464,16 +507,24 @@
       hw.appendChild(strip);
     }
 
-    if (project.links && project.links.length) {
+    if ((project.links && project.links.length) || project.repo) {
       var la = el('div', 'hero-actions');
       la.style.marginTop = '22px';
-      project.links.forEach(function (l) {
+      (project.links || []).forEach(function (l) {
         var a = document.createElement('a');
         a.className = 'btn btn-primary';
         a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
         a.textContent = l.label;
         la.appendChild(a);
       });
+      // Source link renders as a secondary button, and only when a repo exists.
+      if (project.repo) {
+        var src = document.createElement('a');
+        src.className = 'btn';
+        src.href = project.repo; src.target = '_blank'; src.rel = 'noopener';
+        src.textContent = 'View source on GitHub';
+        la.appendChild(src);
+      }
       hw.appendChild(la);
     }
 

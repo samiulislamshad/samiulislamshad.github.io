@@ -13,8 +13,9 @@
    Media `type` values:
      'gif'     - click-to-play (never auto-fetched; weight is shown on the
                  placeholder). Optional `poster` shows a dimmed still behind it.
-     'mp4'     - <video preload="none"> so no bytes load until play is pressed.
-                 Give it a `poster` image.
+     'mp4'     - with a `poster`, shows the video with preload="none".
+                 WITHOUT a poster, gets a click-to-play placeholder instead
+                 (a poster-less preload="none" video paints a black box).
      'youtube' - click-to-load facade; `src` is the bare video id.
      'image'   - a plain lazy-loaded still.
 
@@ -29,22 +30,24 @@ const SITE = {
   name: 'Samiul Islam',
   role: 'Gameplay Programmer',
   location: 'Dhaka, Bangladesh',
+  availability: 'Open to remote work and relocation',
   email: 'samiulislamshad@gmail.com',
   phone: '+880 1521 333415',
   linkedin: 'https://www.linkedin.com/in/samiulislamshad',
   resume: 'resume/Samiul_Islam_Resume.pdf',
+  updated: 'August 2026',
 
   blurb:
     'Gameplay and systems programmer with four years building shipped Unity and ' +
     'Godot titles. I build enemy AI, procedural generation, combat and animation ' +
     'systems, and the editor tooling other disciplines depend on.',
 
-  /* Headline facts. All four come from git history and are checkable. */
+  /* Headline facts. Lead with things a visitor can go and check. */
   facts: [
-    { num: '41%',    label: 'of 2,427 commits on Starfallen Prince — top contributor of nine developers' },
-    { num: '100%',   label: 'of the enemy system on Museum Keeper’s Unity rebuild — every state machine and the pathfinding' },
-    { num: '~8,000', label: 'Steam sales on AlexanderBall, built by a team of 3' },
-    { num: '4 yrs',  label: 'professional gameplay programming across Unity and Godot' }
+    { num: '2 engines', label: 'built Museum Keeper’s mine systems twice — once in Godot, then again in Unity' },
+    { num: '~8,000',    label: 'Steam sales on AlexanderBall, shipped by a team of three' },
+    { num: 'Playable',  label: 'Dhaka Survivor runs free in the browser — exhibited at Cartoons for Equality' },
+    { num: '4 yrs',     label: 'professional gameplay programming across Unity and Godot' }
   ]
 };
 
@@ -60,7 +63,7 @@ const PROJECTS = [
     title: 'Starfallen Prince',
     studio: 'Bad WiFi Interactive',
     period: 'Sept 2024 — present',
-    status: 'In development',
+    status: 'Coming soon on Steam',
     statusTone: 'amber',
     engine: 'Unity 6.5',
     language: 'C#',
@@ -68,7 +71,7 @@ const PROJECTS = [
 
     tagline:
       'Pixel-art 2D isometric bullet-heaven with a story-driven kingdom-building ' +
-      'hub. Top contributor of nine on a 78,000-line codebase.',
+      'hub. I own the combat and presentation layer.',
 
     about: [
       'Expedition runs are a bullet-heaven where hundreds of enemies converge on the ' +
@@ -82,12 +85,11 @@ const PROJECTS = [
     metrics: [
       { label: '1,205 C# files' },
       { label: '77,978 lines' },
-      { label: '997 / 2,427 commits (41%)' },
-      { label: 'Top contributor of 9' },
+      { label: 'Principal author: weapons, cutscenes, animation' },
       { label: 'URP 17.5 2D' }
     ],
 
-    cardMetrics: ['77,978 lines / 1,205 files', 'Top contributor of nine', 'Weapon stack: 95% of live code'],
+    cardMetrics: ['Weapons, cutscenes, animation', '77,978-line codebase', 'Nine-developer team'],
 
     stack: ['Unity 6.5', 'C#', 'URP 2D', 'Zenject', 'UniRx', 'UniTask', 'FMOD', 'Cinemachine', 'DOTween', 'Shader Graph', 'VFX Graph'],
 
@@ -100,36 +102,36 @@ const PROJECTS = [
       { name: 'Audio Integration',   detail: 'FMOD adaptive music driven from gameplay signals.' }
     ],
 
-    mediaNote:
-      'Gameplay captures for this project are not published yet. Drop GIFs or MP4s into ' +
-      'assets/starfallen-prince/ and add them to the matching feature in js/content.js.',
-
     features: [
       {
         title: 'Weapon system',
-        tags: ['7 weapon types', 'Interface segregation', 'Factory'],
-        body: ['Seven weapon categories, each only implementing what it actually has.'],
+        tags: ['7 weapon types', 'Swappable loadout', 'Aspects'],
+        body: ['Seven weapons, each with its own moveset — and an aspect layer that multiplies what any of them can do.'],
         bullets: [
-          'Separate interfaces for auto-attack, light attack, heavy attack and levelable weapons',
-          'Heavy attacks resolve through dedicated cone and projectile-area geometry calculators',
-          'Weapon creation runs through a factory that clones its source data, so an instance can never mutate the shared database',
-          '<strong>Weapon aspects</strong> — a modifier framework for ricochet, recall, magnetic and deluge, each with its own config, model, controller and view',
-          '<strong>Skill card draft</strong> on level-up, with a card database and collected-card tracking',
-          'Projectile subsystem with its own factory, pool and trigger handling'
+          'Every weapon has its <strong>own light attack and heavy attack</strong> — not one shared moveset reskinned per weapon',
+          'Weapons can be <strong>swapped, equipped and unequipped freely</strong> mid-run, so your loadout is a live decision rather than a pre-run commitment',
+          '<strong>Aspects</strong> are a separate layer on top — ricochet, recall, magnetic, deluge',
+          '<strong>Any weapon can carry any aspect</strong>, so the combinations multiply instead of adding — the same sword plays differently depending on what it is carrying',
+          'Each aspect changes how a weapon behaves in flight and on hit, not just its damage numbers',
+          '<strong>Skill card draft</strong> on level-up, tracked against a card database'
         ],
-        media: []
+        media: [
+          { type: 'mp4', src: 'assets/starfallen-prince/WeaponSystem.mp4', weight: '17.3 MB',
+            caption: 'Weapon swapping, per-weapon light and heavy attacks, and aspects applied across weapons.' }
+        ]
       },
 
       {
         title: 'Player combat and movement',
-        tags: ['Combat', 'Dash', 'Damage'],
+        tags: ['Combat', 'Attack modes', 'Damage'],
         body: ['Everything the player does, and how it resolves against enemies.'],
         bullets: [
-          'Directional movement, dash, light and heavy attack, and weapon throw',
+          'Directional movement, dash, and weapon throw',
+          '<strong>Auto-attack, light attack and heavy attack modes</strong>, each behaving differently depending on the equipped weapon',
+          'Levelable weapon behaviour that changes as a weapon is upgraded during a run',
           'Damage calculation driven by weapon and target type rather than flat numbers',
           'Health, shields and the signals that drive HUD feedback',
-          'Elevation and tile detection so the player reads correctly in isometric space',
-          'Attack-cone geometry recalculated on weapon change — deliberately not per frame'
+          'Elevation and tile detection so the player reads correctly in isometric space'
         ],
         media: []
       },
@@ -145,7 +147,10 @@ const PROJECTS = [
           'Weapon effects step through a per-category sprite list driven by one animation event per frame',
           'Driven entirely by signals, so no system polls animation state'
         ],
-        media: []
+        media: [
+          { type: 'mp4', src: 'assets/starfallen-prince/EnemyAnimations.mp4', weight: '13.8 MB',
+            caption: 'Enemy animation set driven from the shared index-based animation data.' }
+        ]
       },
 
       {
@@ -179,7 +184,7 @@ const PROJECTS = [
       {
         title: 'Enemy presentation, VFX and pooling',
         tags: ['Object pooling', 'VFX', 'Spatialised audio'],
-        body: ['My work on the enemies is the presentation layer — their AI belongs to a colleague.'],
+        body: ['The enemy view layer — how they look, animate, and get recycled.'],
         bullets: [
           'Base enemy view plus twelve per-archetype view classes',
           'Forward and backward movement animation, submerged effect, shaman ring, unlit variants',
@@ -201,7 +206,7 @@ const PROJECTS = [
           'NonAlloc physics queries instead of <code>OverlapCircleAll</code>, which allocates a fresh array every call',
           'Cached callbacks instead of method groups, which allocate a delegate per strike',
           'Sprite lists handed over as read-only interfaces so there is no copy',
-          '<strong>Rebuilt map chunk streaming into resident chunks</strong> after measuring that the activate/deactivate cost exceeded the saving — net 532 deletions against 197 insertions, plus a batch editor tool to migrate existing scenes',
+          '<strong>Rebuilt map chunk streaming into resident chunks</strong> — there was a visible hitch on every chunk switch, and once measured the activate/deactivate cost outweighed what streaming saved. Shipped a batch editor tool to migrate the existing scenes',
           'Fixed a lag spike caused by creating and destroying the hit-effect shader material on every enemy hit',
           'Additive async scene loading with shader-variant warmup to remove first-frame compile hitches',
           'Four URP quality tiers wired to the graphics options menu'
@@ -226,7 +231,7 @@ const PROJECTS = [
       {
         title: 'Shaders and visual effects',
         tags: ['HLSL', 'Shader Graph', 'VFX Graph'],
-        body: ['Shader work here is split roughly evenly with another developer. My contributions:'],
+        body: ['Hit feedback, environment effects and UI transitions.'],
         bullets: [
           'Hit flash, dappled forest light, water waves, projectile aura and sprite transparency',
           'Weapon alpha cutoff and a circle-fade UI transition',
@@ -245,7 +250,7 @@ const PROJECTS = [
     id: 'museum-keeper',
     title: 'Museum Keeper',
     studio: 'Red Thorn Interactive',
-    period: 'Sept 2023 — present',
+    period: 'Godot 2023–2024 · Unity rebuild 2026–present',
     status: 'Coming soon on Steam',
     statusTone: 'violet',
     engine: 'Godot 4 → Unity',
@@ -270,7 +275,6 @@ const PROJECTS = [
 
     metrics: [
       { label: 'Godot: 1,421 commits, 5 devs' },
-      { label: 'Unity rebuild: 150 commits' },
       { label: '94% of the Godot mine code' },
       { label: '100% of the Unity enemy system' },
       { label: 'Two engines, four years' }
@@ -293,10 +297,7 @@ const PROJECTS = [
       { name: 'Backend',             detail: 'Contributed to the ASP.NET Core REST service that served game data in the Godot build.' }
     ],
 
-    mediaNote:
-      'The clips above are from the Godot original. Captures of the Unity rebuild are not ' +
-      'published yet — drop GIFs or MP4s into assets/museum-keeper/ and add them to the ' +
-      'matching feature in js/content.js.',
+    mediaNote: 'The clips on this page are from the Godot original.',
 
     features: [
       {
@@ -422,7 +423,7 @@ const PROJECTS = [
           'Mine ambience driven by <strong>player depth</strong> through the global 2D light intensity — the deeper you go, the darker it gets',
           'Because lights on a shared blend style accumulate, a torch near the player <strong>restores normal brightness locally</strong>',
           'Light sources register dynamically, so torches and placed items light the world as they appear',
-          'This replaced an unlit shader quad that no 2D light could cut through — I left the old quad in the scene disabled rather than deleted, so the previous look stays one checkbox away',
+          'Replaced an unlit shader quad that no 2D light could ever cut through',
           'Colour-ramp and colour-swap shader materials for wall shadows and UI darkening',
           'Fake wall shadows rendered as a dedicated offset tilemap layer',
           'A redundant-write guard skips light updates that would not change anything'
@@ -462,13 +463,13 @@ const PROJECTS = [
       {
         title: 'Architecture and engineering standard',
         tags: ['SOLID', 'Zenject', 'Audited'],
-        body: ['The Unity rebuild is held to a written standard I defined — and the audit shows it held.'],
+        body: ['Scattered <code>Update</code> calls made execution order accidental and caused ordering bugs, so ticking was centralised — and I wrote down the standard that came out of it.'],
         bullets: [
+          'Continuous work runs on dependency-injected tickables with <strong>explicit ordering</strong>, instead of per-object <code>Update</code> methods running in whatever order Unity picks',
           'Canonical folder layout per feature, with explicit rules for what each layer may and may not do',
           'Mandatory disposal on every behaviour-bearing controller and model',
           'No service locators, no hidden singletons',
-          '<strong>Hard ban on <code>Update</code>, <code>FixedUpdate</code>, <code>LateUpdate</code> and coroutines</strong> in favour of dependency-injected tickables with explicit ordering',
-          'Verified across all 477 files: <strong>zero</strong> of those methods, <strong>zero</strong> coroutines, exactly six tickables, and only 5% of files deriving from MonoBehaviour',
+          'The standard held under audit: across all 477 files there are <strong>zero</strong> <code>Update</code>, <code>FixedUpdate</code> or <code>LateUpdate</code> methods, <strong>zero</strong> coroutines, exactly six tickables, and only 5% of files derive from MonoBehaviour',
           'Typed event bus constrained to structs, so signal payloads never allocate',
           '<strong>Reference-counted pause system</strong> — nested pausers compose safely, and in-flight async sequences park at a gate rather than being cancelled',
           'AI state tracer that compiles out of release builds entirely',
@@ -673,7 +674,200 @@ const PROJECTS = [
   },
 
   /* ======================================================================
-     4. AR INTERIOR WALLPAPER APP
+     4. DHAKA SURVIVOR
+     ====================================================================== */
+  {
+    id: 'dhaka-survivor',
+    title: 'Dhaka Survivor',
+    studio: 'The Second Studio',
+    period: '2025 — 2026',
+    status: 'Playable now — free',
+    statusTone: 'accent',
+    engine: 'Unity 6 · WebGL',
+    language: 'C#',
+    featured: true,
+
+    tagline:
+      'Endless runner built for the browser in 7 days. One build that adapts to keyboard, ' +
+      'gamepad or touch on the fly, with an online leaderboard.',
+
+    about: [
+      'An endless runner is a familiar shape. What makes this one interesting is where it ' +
+      'had to run: a public exhibition, in a browser, on whatever hardware happened to be ' +
+      'in front of the player.',
+
+      'So the game ships as a single WebGL build that detects how you are playing and ' +
+      'reconfigures itself — keyboard and mouse, a gamepad, or a touchscreen — and swaps ' +
+      'its controls mid-session if you change your mind. Scores go to an online ' +
+      'leaderboard so visitors could compete against everyone who had played before them.',
+
+      'It was featured as a free-to-play title in the recreation corner of the ' +
+      '<strong>Cartoons for Equality</strong> art exhibition, sponsored by the Canadian ' +
+      'Embassy.'
+    ],
+
+    metrics: [
+      { label: 'Built in 7 days' },
+      { label: '134 C# files · 8,717 lines' },
+      { label: '12 systems' },
+      { label: 'WebGL · URP 2D' },
+      { label: 'Exhibited publicly' }
+    ],
+
+    cardMetrics: ['Playable free in the browser', 'Keyboard, gamepad and touch', 'Built in 7 days'],
+
+    stack: ['Unity 6', 'C#', 'WebGL', 'URP 2D', 'Zenject', 'UniRx', 'UniTask', 'PlayFab', 'Unity Input System', '2D Animation', 'Aseprite Importer'],
+
+    links: [
+      { label: 'Play it on itch.io', url: 'https://the-second-studio.itch.io/dhaka-survivor?secret=eCKIpmAoZvj1IgcvnymPcuXHc' }
+    ],
+    repo: 'https://github.com/samiulislamshad/Dhaka-Survivor',
+
+    roles: [
+      { name: 'Solo Developer',    detail: 'Every system in the game, built in a 7-day window.' },
+      { name: 'Gameplay Programmer', detail: 'Runner loop, player control, enemy spawning, scoring, pause.' },
+      { name: 'Systems Programmer',  detail: 'Cross-device input detection, leaderboard integration, loading and scene flow.' },
+      { name: 'Backend Integration', detail: 'PlayFab-backed online leaderboard with user registration.' }
+    ],
+
+    features: [
+      {
+        title: 'One build, three ways to play',
+        tags: ['Keyboard', 'Gamepad', 'Touchscreen', 'WebGL'],
+        body: ['The game works out how you are playing and reconfigures itself — and it keeps checking.'],
+        bullets: [
+          'A single WebGL build supports <strong>keyboard and mouse, gamepad, and touchscreen</strong> — no separate mobile version',
+          'Input mode is detected from <strong>whichever device produced the most recent action</strong>, not from what platform the browser reports — so it is right even when the browser is wrong',
+          'Put the keyboard down and pick up a controller and the UI <strong>switches mid-session</strong>, without a restart or a settings menu',
+          'On-screen touch controls appear automatically when the player is on a touchscreen',
+          'A <strong>virtual keyboard</strong> lets touch and gamepad players enter their leaderboard name — otherwise anyone without a physical keyboard simply could not submit a score',
+          'Input state is exposed reactively, so any UI can respond to a device change without polling'
+        ],
+        media: []
+      },
+
+      {
+        title: 'Online leaderboard',
+        tags: ['PlayFab', 'Backend', 'Competitive'],
+        body: ['Scores are global, so exhibition visitors compete against everyone who played before them.'],
+        bullets: [
+          'Backed by <strong>PlayFab</strong>, with score submission and ranked retrieval',
+          'New players register a name on first play; returning players keep their entry',
+          'The leaderboard is its own scene with a scrollable ranked table',
+          'Scroll navigation is signal-driven so it is browsable on a gamepad and by touch, not just by mouse wheel'
+        ],
+        media: []
+      },
+
+      {
+        title: 'Built for a public exhibition',
+        tags: ['WebGL', 'Kiosk', '7-day build'],
+        body: ['Featured in the recreation corner of the Cartoons for Equality exhibition, sponsored by the Canadian Embassy.'],
+        bullets: [
+          'Shipped to <strong>WebGL</strong> so it runs on whatever the venue has, with nothing to install',
+          'Free to play, aimed at visitors with no gaming background and no time to learn controls',
+          'An inactivity detector warns and then resets an abandoned session, so an unattended machine returns itself to a playable state',
+          'Whole game designed, built and shipped in a <strong>7-day window</strong>'
+        ],
+        media: []
+      },
+
+      {
+        title: 'The runner itself',
+        tags: ['Parallax', 'Zenject', 'Modular'],
+        body: ['Twelve systems, each installed through dependency injection and independently testable.'],
+        bullets: [
+          'Parallax scrolling backgrounds for depth',
+          'Enemy spawning with escalating difficulty',
+          'Score tracking feeding the leaderboard submission',
+          'Pause, audio, loading screen and main menu systems',
+          'Same architecture discipline as my commercial work — MVC separation, Zenject installers, reactive state via UniRx, async via UniTask'
+        ],
+        media: []
+      }
+    ]
+  },
+
+  /* ======================================================================
+     5. MULTIPLAYER FIGHTING GAME PROTOTYPE
+     ====================================================================== */
+  {
+    id: 'multiplayer-fighting-prototype',
+    title: 'Multiplayer Fighting Game Prototype',
+    studio: 'Personal project',
+    period: 'January 2026',
+    status: 'Prototype',
+    statusTone: 'violet',
+    engine: 'Unity 6 · 3D',
+    language: 'C#',
+    featured: false,
+
+    tagline:
+      'A 3-day challenge: build a working peer-to-peer multiplayer fighting prototype ' +
+      'from nothing, using Photon PUN 2.',
+
+    about: [
+      'I set myself a three-day challenge — get two players connected over the network, ' +
+      'fighting each other with a shared animation set, from an empty project to a ' +
+      'complete playable loop.',
+
+      'The result runs the whole round trip: connect, find a match, spawn both players, ' +
+      'trade punches and kicks with synced health, declare a winner, and return everyone ' +
+      'to the menu.'
+    ],
+
+    metrics: [
+      { label: 'Built in 3 days' },
+      { label: 'Photon PUN 2' },
+      { label: 'Peer-to-peer' },
+      { label: '2-player matches' }
+    ],
+
+    cardMetrics: ['3-day challenge', 'Photon PUN 2 networking', 'Full connect-to-victory loop'],
+
+    stack: ['Unity 6', 'C#', 'Photon PUN 2', 'Zenject', 'UniRx', 'Unity Input System'],
+
+    repo: 'https://github.com/samiulislamshad/MultiplayerFightingGamePrototype',
+
+    roles: [
+      { name: 'Solo Developer', detail: 'Networking, gameplay, UI and architecture, in three days.' }
+    ],
+
+    features: [
+      {
+        title: 'Peer-to-peer multiplayer',
+        tags: ['Photon PUN 2', 'Lobby', 'RPCs'],
+        body: ['The full session lifecycle, not just a connection test.'],
+        bullets: [
+          'Connect to the master server, join a lobby, then <strong>create a named room or join a random one</strong>',
+          'Rooms cap at two players; once full, the host loads the match scene and brings the other client with it',
+          'Both players spawn over the network at opposing positions, each facing the other',
+          '<strong>Ownership-gated control</strong> — you drive your own character and only your own',
+          'Combat is <strong>RPC-driven</strong>: punch, kick, flying kick, damage, health sync and the victory screen all propagate across the network',
+          'Clean teardown — the match resolves a winner, shows a victory screen, and returns both players to the menu'
+        ],
+        media: []
+      },
+
+      {
+        title: 'Stack and integration',
+        tags: ['Zenject', 'UniRx', 'Input System'],
+        body: ['Built on the same toolset I use professionally, which is most of why it came together in three days.'],
+        bullets: [
+          '<strong>Photon PUN 2</strong> for networking, over Photon\'s relay',
+          '<strong>Zenject</strong> for dependency injection, <strong>UniRx</strong> for reactive state, <strong>Unity Input System</strong> for input',
+          'Photon callbacks wrapped as observable streams, so game systems subscribe to network events instead of inheriting from Photon base classes',
+          'One integration problem worth noting: Photon instantiates the player prefab itself, so the DI container never sees it — solved by resolving the scene context and injecting the instance manually',
+          'Character animations are Mixamo assets; the work here is the networking and the systems around it',
+          'Scope note: this is a relay-based prototype with standard transform and animator sync — no client-side prediction or server-authoritative validation'
+        ],
+        media: []
+      }
+    ]
+  },
+
+  /* ======================================================================
+     6. AR INTERIOR WALLPAPER APP  (earlier work)
      ====================================================================== */
   {
     id: 'ar-wallpaper',
@@ -685,6 +879,7 @@ const PROJECTS = [
     engine: 'Unity 3D',
     language: 'C#',
     featured: false,
+    earlier: true,
 
     tagline:
       'Augmented reality tool that previews wallpaper designs on real walls, so the ' +
@@ -718,7 +913,7 @@ const PROJECTS = [
   },
 
   /* ======================================================================
-     5. BONGERS
+     7. BONGERS  (earlier work)
      ====================================================================== */
   {
     id: 'bongers',
@@ -730,6 +925,7 @@ const PROJECTS = [
     engine: 'Unity 3D',
     language: 'C#',
     featured: false,
+    earlier: true,
 
     tagline:
       'Arcade 2D platformer prototype inspired by Bonkheads (1997) — you kill enemies ' +
@@ -776,7 +972,7 @@ const PROJECTS = [
   },
 
   /* ======================================================================
-     6. WHAT FLIES
+     8. WHAT FLIES  (earlier work)
      ====================================================================== */
   {
     id: 'what-flies',
@@ -788,6 +984,7 @@ const PROJECTS = [
     engine: 'Unity 3D',
     language: 'C#',
     featured: false,
+    earlier: true,
 
     tagline:
       'Infinite runner about the universal experience of birds ruining a freshly cleaned ' +
@@ -826,7 +1023,7 @@ const PROJECTS = [
 const SKILLS = [
   {
     group: 'Languages & Engines',
-    items: ['C#', 'Unity 3D (6.x, URP 2D)', 'Godot 4', 'Java', 'Dart', 'C++ (Arduino)', 'HLSL', 'Shader Graph']
+    items: ['C#', 'Unity 3D (6.x, URP 2D)', 'Godot 4', 'WebGL', 'HLSL', 'Shader Graph']
   },
   {
     group: 'Architecture & Patterns',
@@ -847,13 +1044,14 @@ const SKILLS = [
   },
   {
     group: 'Frameworks & Middleware',
-    items: ['Zenject / Extenject', 'UniRx', 'UniTask', 'FMOD Studio', 'Unity Input System',
-            'Cinemachine', 'DOTween', 'ASP.NET Core', 'Addressables', 'Mirror', 'Netcode', 'Firebase']
+    items: ['Zenject / Extenject', 'UniRx', 'UniTask', 'FMOD Studio', 'Photon PUN 2',
+            'PlayFab', 'Unity Input System', 'Cinemachine', 'DOTween', 'Addressables',
+            'ASP.NET Core']
   },
   {
     group: 'Tools & Pipeline',
-    items: ['Custom EditorWindows', 'Property drawers', 'Config validators', 'Data migration tools',
-            'Git / GitHub', 'Blender', 'Photoshop', 'Illustrator', 'Flutter']
+    items: ['Custom EditorWindows', 'Property drawers', 'Config validators',
+            'Data migration tools', 'Git / GitHub', 'Blender']
   }
 ];
 
@@ -863,10 +1061,9 @@ const EXPERIENCE = [
     role: 'Gameplay Programmer',
     period: 'Sept 2024 — present',
     points: [
-      'Top contributor of nine on <strong>Starfallen Prince</strong> — 997 of 2,427 commits across a 78,000-line Unity 6.5 codebase.',
-      'Own the weapon stack, cutscene sequencer, player animation and Nexus hub systems, holding 95–100% of the live code in each.',
+      'Principal author of the weapon, cutscene, player-animation and Nexus hub systems on <strong>Starfallen Prince</strong>, a 78,000-line Unity 6.5 project built by nine developers.',
       'Eliminated GC pressure across the combat hot paths — reused signal instances, NonAlloc physics queries, and cached callbacks in place of per-strike delegate allocation.',
-      'Reworked map chunk streaming into resident chunks after measuring the switching cost, and shipped a batch editor tool to migrate the existing scenes.',
+      'Reworked map chunk streaming into resident chunks after a visible per-switch hitch, and shipped a batch editor tool to migrate the existing scenes.',
       'Delivered cutscene tooling for the wider team: custom property drawers, a config validator, and a parameter migrator that preserved already-authored content through a refactor.'
     ]
   },
@@ -887,7 +1084,7 @@ const EXPERIENCE = [
     role: 'Junior Game Developer',
     period: 'June 2021',
     points: [
-      'Worked on an online multiplayer PC game in Unity — where my networking exposure (Mirror, Netcode) comes from.'
+      'Worked on an online multiplayer PC game in Unity.'
     ]
   },
   {
@@ -907,6 +1104,10 @@ const EDUCATION = [
 ];
 
 const ACHIEVEMENTS = [
+  {
+    title: 'Dhaka Survivor exhibited at Cartoons for Equality',
+    detail: 'Featured as a free-to-play title in the recreation corner of the exhibition, sponsored by the Canadian Embassy.'
+  },
   {
     title: 'Published research — 8th IEEE CSDE, Brisbane',
     detail: 'Real-world objects augmentation in a virtual 3D environment: RealSense SDK, deep learning and game engine.',
@@ -962,12 +1163,14 @@ const ACHIEVEMENTS = [
   studio:   'Studio name',        // or 'Personal project'
   period:   '2026 — present',
   status:   'In development',     // free text on the badge
-  statusTone: 'amber',            // 'accent' = shipped (green)
+  statusTone: 'amber',            // 'accent' = shipped / playable (green)
                                   // 'amber'  = in development
                                   // 'violet' = prototype / coming soon
   engine:   'Unity 6.5',
   language: 'C#',
   featured: true,                 // true adds the accent bar down the card edge
+  earlier:  false,                // true moves it to the "Earlier work" section
+                                  // at the bottom of the home page
 
   tagline: 'One sentence. Used on the card AND under the page title.',   // REQUIRED
 
@@ -988,9 +1191,10 @@ const ACHIEVEMENTS = [
 
   stack: ['Unity', 'C#', 'Zenject'],           // small chips in a "Stack" section
 
-  links: [                                     // buttons under the page title
-    { label: 'View on Steam', url: 'https://store.steampowered.com/app/...' }
+  links: [                                     // primary buttons under the title
+    { label: 'Play it on itch.io', url: 'https://...' }
   ],
+  repo: 'https://github.com/you/my-new-game',  // adds a "View source" button
 
   roles: [                                     // the "My contribution" list
     { name: 'Gameplay Programmer', detail: 'What you actually did.' },
@@ -1015,9 +1219,14 @@ const ACHIEVEMENTS = [
           weight: '2.4 MB',                    // shown on the play button
           caption: 'What this clip shows.' },
 
-        // A video. preload="none", so it costs nothing until played.
+        // A video WITH a poster: shows the frame, downloads on play.
         { type: 'mp4',   src: 'assets/my-new-game/clip.mp4',
           poster: 'assets/my-new-game/clip-poster.png',
+          caption: 'What this video shows.' },
+
+        // A video WITHOUT a poster: gets a click-to-play button instead.
+        { type: 'mp4',   src: 'assets/my-new-game/other.mp4',
+          weight: '8.0 MB',
           caption: 'What this video shows.' },
 
         // A YouTube video. `src` is the bare id from the URL, nothing else.

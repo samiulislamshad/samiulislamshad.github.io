@@ -178,6 +178,12 @@ a:hover { text-decoration: underline; }
   font-family: var(--font-mono); color: var(--accent);
   font-size: clamp(0.95rem, 2.2vw, 1.15rem); margin: 0 0 22px;
 }
+.hero .hero-availability {
+  font-family: var(--font-mono); font-size: 0.85rem;
+  color: var(--fg-muted); margin: 0 0 22px;
+}
+.hero .hero-availability::before { content: "\25CF "; color: var(--accent); }
+
 .hero .hero-blurb {
   max-width: var(--maxw-prose); color: var(--fg-muted);
   font-size: 1.05rem; margin: 0 0 28px;
