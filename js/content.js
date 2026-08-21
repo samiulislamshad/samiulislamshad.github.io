@@ -140,15 +140,18 @@ const PROJECTS = [
 
             {
                 title: 'Player combat and movement',
-                tags: ['Combat', 'Attack modes', 'Damage'],
-                body: ['Everything the player does, and how it resolves against enemies.'],
+                tags: ['8-directional movement', 'Attack modes', 'Charge-based heavy attacks', 'Dodge roll'],
+                body: ['How the player moves, attacks, and gets out of trouble — with a real choice built into each one.'],
                 bullets: [
-                    'Directional movement, dash, and weapon throw',
-                    '<strong>Auto-attack, light attack and heavy attack modes</strong>, each behaving differently depending on the equipped weapon',
-                    'Levelable weapon behaviour that changes as a weapon is upgraded during a run',
-                    'Damage calculation driven by weapon and target type rather than flat numbers',
-                    'Health, shields and the signals that drive HUD feedback',
-                    'Elevation and tile detection so the player reads correctly in isometric space'
+                    '<strong>Eight-directional movement.</strong> Most 2D bullet-heaven games move the player on two or four directions; this one moves on eight, which reads as noticeably smoother and gives finer control when weaving through a packed screen of enemies',
+                    '<strong>Three attack modes.</strong> The player chooses how much control they want over targeting and timing, from fully automatic to fully manual',
+                    '<strong>Assisted</strong> attacks continuously and automatically aims at the nearest enemy, so the player can focus entirely on movement and positioning',
+                    '<strong>Auto</strong> keeps attacking on its own once triggered, but the player chooses which direction it fires',
+                    '<strong>Manual</strong> hands the player full control over both when and where every attack lands',
+                    '<strong>Light and heavy attacks.</strong> Every hit with a light attack builds toward a heavy attack, stored as a set of charge bars',
+                    'Triggering a heavy attack spends that stored charge — how much damage it does depends on the weapon in hand and how many charge bars were filled when it goes off, so holding out for a fuller charge is a real risk-reward decision, not just a bigger number',
+                    '<strong>Dodge roll.</strong> The dodge plays out in two phases, a dive into a roll, and the player is invincible for both — enough to cut straight through a crowd of enemies or an attack that would otherwise be fatal',
+                    '<strong>Weapon throw.</strong> The same action either discards the weapon in hand, or, if that weapon carries a throw-based aspect such as Recall, triggers that aspect instead — so throwing a weapon can mean losing it or briefly turning it into a ranged attack, depending on what it is imbued with'
                 ],
                 media: []
             },
