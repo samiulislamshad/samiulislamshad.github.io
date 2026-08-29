@@ -375,6 +375,10 @@ const PROJECTS = [
                     'Long searches can be abandoned mid-flight rather than blocking the frame',
                     '<strong>Relocation leash</strong> — enemies far from the player for long enough are respawned near them but off-camera, so encounter density stays constant without the AI cost growing all session',
                     'Fixed a bat collider getting stuck by moving its flight wobble from the physics body to a visual-only sprite offset',
+                    '<strong>Flying enemies path completely differently from grounded ones</strong> — a flying enemy checks open air in all four directions with no floor requirement and no fall cost, while a grounded enemy can only walk or drop through a weighted fall step, so the same pathfinder produces genuinely different movement for each',
+                    'Bats that share a destination fan out instead of colliding: each one gets a stable formation slot on spawn, and that slot skews both its flight-path scan order and its wobble timing so a group of bats visibly spreads out and desyncs rather than moving and bobbing in lockstep',
+                    'A bat that could not complete a normal grid path and simply froze mid-flight was a real, named bug — the fix added stall and timeout detection plus a fallback "close the last stretch directly" mode for when the tile-by-tile path breaks down near the target',
+                    'Bats avoid stalactites and stalagmites while pathfinding, and that avoidance is <strong>reactive</strong> — if a stalactite falls and re-lodges elsewhere mid-run, the pathfinder is notified immediately and any bat already in flight reroutes around it',
                     'Fixed ledge jitter in the fall state, and a stuck-detection loop that ignored repeated successful repositions'
                 ],
                 media: [
@@ -441,7 +445,8 @@ const PROJECTS = [
                     'Unity rebuild handles item actions as <strong>swappable strategies</strong>: tool, weapon, placeable, consumable, animated',
                     'Placeable machines each run their own state machine — dynamite in three sizes, elevator, pile driver, torch',
                     'Progressive <strong>directional crack sprites</strong> update on the pickaxe impact frame as a wall takes damage',
-                    'Directional screen shake with graded intensity, and pooled explosion smoke'
+                    'Directional screen shake with graded intensity, and pooled explosion smoke',
+                    'Cell and object damage queries reuse a single pre-sized collision-results buffer instead of allocating a new list on every hit, keeping the digging and combat loop free of garbage-collection pressure'
                 ],
                 media: [
                     {
@@ -453,16 +458,17 @@ const PROJECTS = [
 
             {
                 title: 'Boss architecture',
-                tags: ['Weighted roll', 'Separate arena', 'Prefab tool'],
-                body: ['Bosses live in their own arena, reached through a gate that may or may not exist in a given run. <em>Current in-progress work.</em>'],
+                tags: ['Weighted roll', 'Procedural arena', 'Async transitions'],
+                body: ['A fully built encounter framework — the arena, the gate, the transitions — with the boss\'s own combat behaviour designed but not yet implemented.'],
                 bullets: [
-                    'A <strong>weighted spawn table</strong> rolls whether a boss gate appears at all — no boss is the normal case, not a failure',
-                    'If one is rolled, a placement service finds a valid gate cell in the generated mine',
-                    'The lair is a <strong>separate prefab arena</strong>, not part of the mine',
-                    'Async entry and exit transitions retarget the camera confiner and restrict player abilities inside',
-                    'Guaranteed valid game state on boss death or teardown',
-                    '<strong>One-click prefab builder tool</strong> constructs the arena hierarchy in code — grid, tilemaps, the required collider pair, lighting — because hand-authoring it was the main source of "player falls through the floor" bugs',
-                    'The tool fails loudly with an actionable message rather than producing a subtly broken asset'
+                    '<strong>Whether a boss exists at all is a weighted roll</strong> — most runs are deliberately boss-free, and a gate only appears if a spawn-table roll and a valid cave/floor location both succeed',
+                    'Gate placement rejects any candidate cell that already has a stalactite or stalagmite formation on it, or lacks solid ground underneath, so a gate never spawns somewhere it would immediately look or behave wrong',
+                    'The boss lair is a <strong>separate arena, not part of the mine</strong> — sealed at runtime with its own generated backdrop and seeded decor, and the mine below is automatically raised out of camera view if it would otherwise be visible',
+                    'Entering and exiting run as <strong>cancellable async transitions</strong>: walk to the gate, wake the arena, cut the camera, teleport the player, and reverse the same sequence on the way out — including a forced early exit if the player dies mid-encounter, since there is deliberately no respawn flow to fall back on',
+                    'The camera re-targets itself to the arena using the actual pixel-perfect visible area rather than the stock camera size property, so framing stays correct even when the arena is smaller than a normal mine room',
+                    'A small lifecycle state machine (<strong>idle, entering, active, exiting</strong>) drives the whole encounter and is pause-aware, so a modal screen can suspend a transition safely',
+                    'The arena hierarchy is generated by a one-click editor tool rather than hand-authored, because a hand-built wall tilemap was the main source of "player falls through the floor" bugs — the tool fails loudly with an explicit message instead of producing a broken asset',
+                    '<strong>The boss\'s own combat behaviour is the next piece to build.</strong> The numbers are fully designed and validated — attack timing, a separate charge attack with its own wind-up and cooldown, and a phase system driven by remaining health — but the state machine that turns those numbers into actual behaviour has not landed yet'
                 ],
                 media: []
             },
@@ -524,6 +530,7 @@ const PROJECTS = [
                     'The standard held under audit: across all 477 files there are <strong>zero</strong> <code>Update</code>, <code>FixedUpdate</code> or <code>LateUpdate</code> methods, <strong>zero</strong> coroutines, exactly six tickables, and only 5% of files derive from MonoBehaviour',
                     'Typed event bus constrained to structs, so signal payloads never allocate',
                     '<strong>Reference-counted pause system</strong> — nested pausers compose safely, and in-flight async sequences park at a gate rather than being cancelled',
+                    'The entire pause system — including retrofitting every other system that needed to react to it — went in as <strong>one single commit</strong>, designed complete rather than bolted on piece by piece, down to details like the day/time clock capturing its exact leftover tick fraction on pause so time never drifts or jumps on resume',
                     'AI state tracer that compiles out of release builds entirely',
                     'Validation contracts on configs and views, so authoring mistakes fail at startup with a readable message'
                 ],
