@@ -44,7 +44,7 @@ const SITE = {
 
     /* Headline facts. Lead with things a visitor can go and check. */
     facts: [
-        {num: '2 engines', label: 'built Museum Keeper’s mine systems twice — once in Godot, then again in Unity'},
+        {num: '0', label: 'Update() calls or coroutines anywhere in Museum Keeper’s Unity rebuild — enforced project-wide, not aspirational'},
         {num: '~8,000', label: 'Steam sales on AlexanderBall, shipped by a team of three'},
         {num: 'Playable', label: 'Dhaka Survivor runs free in the browser — exhibited at Cartoons for Equality'},
         {num: '4 yrs', label: 'professional gameplay programming across Unity and Godot'}
@@ -281,7 +281,7 @@ const PROJECTS = [
 
         tagline:
             'Dig a procedurally generated mine for artifacts, then exhibit them in a museum. ' +
-            'Built in Godot 4, now being rebuilt in Unity — and I own the mine in both engines.',
+            'Built in Godot 4, now being rebuilt in Unity — with zero Update() calls or coroutines anywhere in the new codebase.',
 
         about: [
             'Two connected games. Underground you explore a procedurally generated mine full of ' +
@@ -296,13 +296,13 @@ const PROJECTS = [
         ],
 
         metrics: [
-            {label: 'Godot: 1,421 commits, 5 devs'},
-            {label: '94% of the Godot mine code'},
-            {label: '100% of the Unity enemy system'},
-            {label: 'Two engines, four years'}
+            {label: 'One shared framework runs every enemy type'},
+            {label: 'Zero Update() calls or coroutines anywhere in the project'},
+            {label: 'A* pathfinding that reacts to the mine changing, instead of polling it'},
+            {label: 'One editor tool eliminated a recurring bug class'}
         ],
 
-        cardMetrics: ['Godot 4 → Unity', 'Owns the mine in both engines', '100% of the Unity enemy system'],
+        cardMetrics: ['Zero Update() calls anywhere', 'One framework, every enemy type', 'A* that reacts, not polls'],
 
         stack: ['Godot 4', 'Unity', 'C#', 'URP 2D', 'Zenject', 'UniRx', 'UniTask', 'ASP.NET Core', 'A* pathfinding', 'Finite state machines', 'Tilemaps', 'Light2D', 'Cinemachine 3', 'DOTween'],
 
@@ -366,10 +366,10 @@ const PROJECTS = [
             {
                 title: 'Enemy AI and pathfinding',
                 tags: ['A*', 'State machines', 'Object pooling'],
-                body: ['Three enemy species — grounded, flying, crawling — share one architecture, all built on a hand-written A* pathfinder.'],
+                body: ['Three enemy species — grounded, flying, crawling — share one architecture, all built on the same A* pathfinder.'],
                 bullets: [
                     '<strong>One 102-file, ~12,800-line framework</strong> drives all three species — config, pooling, factories, pathfinding, and spawn placement are all species-agnostic, with each enemy\'s personality confined to its own state machine and data',
-                    'Pathfinding is <strong>hand-written A*</strong> over a cached navigation snapshot — a fall step costs more than a walked step, cancellation is checked every 64 node expansions so a long search never blocks a frame, and a navigation-revision counter lets enemies react to the mine changing instead of polling it',
+                    'Pathfinding is <strong>A*</strong> over a cached navigation snapshot — a fall step costs more than a walked step, cancellation is checked every 64 node expansions so a long search never blocks a frame, and a navigation-revision counter lets enemies react to the mine changing instead of polling it',
                     'Every enemy is <strong>pooled, not instantiated and destroyed</strong> — released instances are reparented and deactivated rather than destroyed, and placement, occupancy and camera-visibility checks are handled once by a shared spawn-location service instead of being reimplemented per species',
                     'A <strong>relocation leash</strong> can respawn an enemy that has drifted far from the player back in near them, off-camera, holding encounter density constant without AI cost growing over a session — a framework capability currently enabled on the RattleSnake',
                     'The <strong>Slime</strong> uses one teleport mechanic for two jobs at once — an offensive gap-closer and a last-resort unstick — gated behind a one-shot aggro telegraph so the player gets a warning beat before an engagement\'s first hit',
@@ -538,7 +538,7 @@ const PROJECTS = [
                     'Canonical folder layout per feature, with explicit rules for what each layer may and may not do',
                     'Mandatory disposal on every behaviour-bearing controller and model',
                     'No service locators, no hidden singletons',
-                    'The standard held under audit: across all 477 files there are <strong>zero</strong> <code>Update</code>, <code>FixedUpdate</code> or <code>LateUpdate</code> methods, <strong>zero</strong> coroutines, exactly six tickables, and only 5% of files derive from MonoBehaviour',
+                    'The standard held under audit: <strong>zero</strong> <code>Update</code>, <code>FixedUpdate</code> or <code>LateUpdate</code> methods anywhere, <strong>zero</strong> coroutines, exactly six tickables, and only 5% of files derive from MonoBehaviour',
                     'Typed event bus constrained to structs, so signal payloads never allocate',
                     '<strong>Reference-counted pause system</strong> — nested pausers compose safely, and in-flight async sequences park at a gate rather than being cancelled',
                     'The entire pause system — including retrofitting every other system that needed to react to it — went in as <strong>one single commit</strong>, designed complete rather than bolted on piece by piece, down to details like the day/time clock capturing its exact leftover tick fraction on pause so time never drifts or jumps on resume',
