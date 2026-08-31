@@ -352,7 +352,8 @@ const PROJECTS = [
                     '<strong>Edge erosion</strong> eats away the cave boundary and <strong>interior corrosion</strong> punches holes, so caves read as organic rather than rectangular',
                     'Resource deposits grow by <strong>random walk</strong> from a root cell until they hit a dead end',
                     'Stalagmites and stalactites placed along floor and ceiling rows',
-                    'In Unity, the entire seven-stage pipeline runs <strong>off the main thread</strong>, so generation can never hitch the frame'
+                    'In Unity, the entire seven-stage pipeline runs <strong>off the main thread</strong>, so generation can never hitch the frame',
+                    'Mine surfaces slowly grow fungal vegetation over time using a maturation queue rather than rescanning every broken cell each tick, and growth is deliberately suppressed inside the camera view — the code\'s own comment notes the reverse order would quietly bias growth toward wherever the player lingers'
                 ],
                 media: [
                     {
@@ -364,24 +365,34 @@ const PROJECTS = [
 
             {
                 title: 'Enemy AI and pathfinding',
-                tags: ['FSM', 'A*', 'State machines'],
-                body: ['I solved this twice — with an FSM in Godot, then as full state machines with real pathfinding in Unity.'],
+                tags: ['A*', 'State machines', 'Object pooling'],
+                body: ['Three enemy species — grounded, flying, crawling — share one architecture, all built on a hand-written A* pathfinder.'],
                 bullets: [
-                    'Godot: finite state machine over component-based architecture, with behaviour sets per enemy type — patrol, rest, explore, attack',
-                    'Enemies move through phases that trigger actions once conditions are met, so encounters escalate',
-                    'Unity: three species with genuinely different movement — a grounded slime, a flying bat, a crawling rattlesnake',
-                    '<strong>Hand-written A* pathfinding</strong> with a multi-destination search, and drops priced differently from steps',
-                    'Because the terrain is constantly being dug, enemies <strong>react to the mine changing</strong> instead of re-polling it',
-                    'Long searches can be abandoned mid-flight rather than blocking the frame',
-                    '<strong>Relocation leash</strong> — enemies far from the player for long enough are respawned near them but off-camera, so encounter density stays constant without the AI cost growing all session',
-                    'Fixed a bat collider getting stuck by moving its flight wobble from the physics body to a visual-only sprite offset',
-                    '<strong>Flying enemies path completely differently from grounded ones</strong> — a flying enemy checks open air in all four directions with no floor requirement and no fall cost, while a grounded enemy can only walk or drop through a weighted fall step, so the same pathfinder produces genuinely different movement for each',
-                    'Bats that share a destination fan out instead of colliding: each one gets a stable formation slot on spawn, and that slot skews both its flight-path scan order and its wobble timing so a group of bats visibly spreads out and desyncs rather than moving and bobbing in lockstep',
-                    'A bat that could not complete a normal grid path and simply froze mid-flight was a real, named bug — the fix added stall and timeout detection plus a fallback "close the last stretch directly" mode for when the tile-by-tile path breaks down near the target',
-                    'Bats avoid stalactites and stalagmites while pathfinding, and that avoidance is <strong>reactive</strong> — if a stalactite falls and re-lodges elsewhere mid-run, the pathfinder is notified immediately and any bat already in flight reroutes around it',
-                    'Fixed ledge jitter in the fall state, and a stuck-detection loop that ignored repeated successful repositions'
+                    '<strong>One 102-file, ~12,800-line framework</strong> drives all three species — config, pooling, factories, pathfinding, and spawn placement are all species-agnostic, with each enemy\'s personality confined to its own state machine and data',
+                    'Pathfinding is <strong>hand-written A*</strong> over a cached navigation snapshot — a fall step costs more than a walked step, cancellation is checked every 64 node expansions so a long search never blocks a frame, and a navigation-revision counter lets enemies react to the mine changing instead of polling it',
+                    'Every enemy is <strong>pooled, not instantiated and destroyed</strong> — released instances are reparented and deactivated rather than destroyed, and placement, occupancy and camera-visibility checks are handled once by a shared spawn-location service instead of being reimplemented per species',
+                    'A <strong>relocation leash</strong> can respawn an enemy that has drifted far from the player back in near them, off-camera, holding encounter density constant without AI cost growing over a session — a framework capability currently enabled on the RattleSnake',
+                    'The <strong>Slime</strong> uses one teleport mechanic for two jobs at once — an offensive gap-closer and a last-resort unstick — gated behind a one-shot aggro telegraph so the player gets a warning beat before an engagement\'s first hit',
+                    'The <strong>RattleSnake</strong>, the largest of the three state machines, recovers from being stuck more quietly — a silent reposition that escalates into the shared relocation system, built around a set of edge-case fixes specific to crawling across uneven, breakable ground',
+                    'The <strong>Bat</strong> paths through open air with no floor requirement and no fall cost, spreads out from other bats in formation instead of clustering on the same route, and reroutes live if a stalactite it was avoiding falls and re-lodges elsewhere'
                 ],
                 media: [
+                    {
+                        type: 'mp4', src: 'assets/museum-keeper/EnemyAi_Bat.mp4', weight: '9.6 MB',
+                        caption: 'The Bat exploring and chasing in flight.'
+                    },
+                    {
+                        type: 'mp4', src: 'assets/museum-keeper/EnemyAi_bat2.mp4', weight: '7.9 MB',
+                        caption: 'The Bat navigating and avoiding obstacles mid-flight.'
+                    },
+                    {
+                        type: 'mp4', src: 'assets/museum-keeper/EnemyAi_Slime.mp4', weight: '5.4 MB',
+                        caption: 'The Slime\'s teleport and aggro behaviour in the mine.'
+                    },
+                    {
+                        type: 'mp4', src: 'assets/museum-keeper/EnemyAI_SlimeAndSnake.mp4', weight: '8.8 MB',
+                        caption: 'The Slime and RattleSnake together in the mine.'
+                    },
                     {
                         type: 'gif', src: 'assets/museum-keeper/enemy-ai-fsm-01.gif', weight: '4.3 MB',
                         caption: 'FSM-driven enemy behaviour: patrol, aggro and attack phases.'
