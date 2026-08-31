@@ -298,8 +298,7 @@ const PROJECTS = [
         metrics: [
             {label: 'One shared framework runs every enemy type'},
             {label: 'Zero Update() calls or coroutines anywhere in the project'},
-            {label: 'A* pathfinding that reacts to the mine changing, instead of polling it'},
-            {label: 'One editor tool eliminated a recurring bug class'}
+            {label: 'A* pathfinding that reacts to the mine changing, instead of polling it'}
         ],
 
         cardMetrics: ['Zero Update() calls anywhere', 'One framework, every enemy type', 'A* that reacts, not polls'],
